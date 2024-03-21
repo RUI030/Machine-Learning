@@ -188,7 +188,7 @@ void matrix::normalize()
         calcSTD();
     normalize(Mean, STD);
 }
-void matrix::split(const matrix &source, int r1, int r2, int c1, int c2)
+void matrix::slice(const matrix &source, int r1, int r2, int c1, int c2)
 {
     if (r1 > r2)
         swap(r1, r2);
@@ -209,9 +209,9 @@ void matrix::split(const matrix &source, int r1, int r2, int c1, int c2)
         this->data.push_back(newRow);
     }
 }
-void matrix::split(const matrix &source, int r1, int r2)
+void matrix::slice(const matrix &source, int r1, int r2)
 {
-    split(source, r1, r2, 0, source.col() - 1);
+    slice(source, r1, r2, 0, source.col() - 1);
 }
 void matrix::fill(double val)
 {

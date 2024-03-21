@@ -29,8 +29,8 @@ public:
     void normalize(const std::vector<double> m, const std::vector<double> s); 
     void normalize(const matrix &source); 
     void normalize(); 
-    void split(const matrix &source, int r1, int r2, int c1, int c2);
-    void split(const matrix &source, int r1, int r2);
+    void slice(const matrix &source, int r1, int r2, int c1, int c2);
+    void slice(const matrix &source, int r1, int r2);
     void fill(double val);
     void add(const matrix &source);
     void sub(const matrix &source);

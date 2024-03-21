@@ -93,8 +93,8 @@ void dataset::copy(const dataset &source, int r1, int r2) {
     k = source.k;
     xdim = source.xdim;
     ydim = source.ydim;
-    x.split(source.x, r1, r2);
-    y.split(source.y, r1, r2);
+    x.slice(source.x, r1, r2);
+    y.slice(source.y, r1, r2);
 }
 void dataset::copy(const dataset &source) {
     copy(source, 0, source.n - 1);
