@@ -258,6 +258,18 @@ void matrix::clear()
     }
     data.clear();
 }
+void matrix::I(const int d, const double val)
+{
+    r = d;
+    c = d;
+    resize(d, d);
+    for (int i = 0; i < d; i++)
+        data[i][i] = val;
+}
+void matrix::I(const int d)
+{
+    I(d, 1.0);
+}
 void matrix::T()
 {
     vector<vector<double>> newData(c, vector<double>(r));
@@ -518,7 +530,7 @@ void matrix::printRow(int ri, int l)
     }
     for (int j = 0; j < min(c, l); j++)
     {
-        cout << setw(10) << data[ri][j];
+        cout << setw(15) << data[ri][j];
     }
     if (c > l)
     {
@@ -527,7 +539,7 @@ void matrix::printRow(int ri, int l)
 }
 void matrix::printRow(int ri)
 {
-    printRow(ri, 12);
+    printRow(ri, 8);
 }
 void matrix::print()
 {

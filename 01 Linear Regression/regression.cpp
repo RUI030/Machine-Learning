@@ -9,6 +9,7 @@ LinearRegression::LinearRegression(int m)
     s = 0.1;
     u.clear();
     u.push_back(0.0); // reduncdant term for convenience
+    //
     for (int j = 1; j < M; j++)
     {
         u.push_back((-M + 1 + 2 * (j - 1) * (M - 1) / (M - 2)) * 3 / M);
@@ -58,10 +59,13 @@ void LinearRegression::update(const matrix &X, const matrix &t)
         }
     }
     // calculate wML
-    matrix PHI_T;
+    matrix PHI_T, _I, tmp;
     PHI_T = PHI;
     PHI_T.T();
     wML = PHI_T * PHI;
+    // ridge regression = ji hong nuo fu regularization
+    _I.I(K * M, 0.5);
+    wML.add(_I);
     wML.inv();
     wML.dot(PHI_T);
     wML.dot(t);
@@ -79,25 +83,34 @@ void LinearRegression::predict(dataset &ds)
 {
     // only update y_predict
     ds.designMatrix(M, s, u);
+    cout << "PHI_val_dim:" << ds.PHI.dim() << "\twML_dim:" << wML.dim() << endl;
     ds.y_predict = ds.PHI * wML;
-    cout << "y_predicted: " << ds.y_predict.dim() << endl;
+    std::cout << "y_predicted: " << ds.y_predict.dim() << std::endl;
 }
 void LinearRegression::eval(dataset &ds)
 {
-    cout<<"...evaluating..."<<endl;
+    std::cout << "...evaluating..." << std::endl;
     predict(ds);
     int Nd = ds.y.row();
     int K = ds.y.col();
-    ds.accuracy.resize(ds.y.col());
-    double tmp;
-    for (int i = 0; i < K; i++)
+    cout << "Nd: " << Nd << "\tK: " << K << endl;
+    ds.accuracy.resize(K);
+    double tmp, ttmp;
+    cout << "Y_dim:" << ds.y.dim() << "\tY_pred_dim:" << ds.y_predict.dim() << endl;
+    for (int i = 0; i < 10; i++)
+        std::cout << "Y: " << ds.y[i][0] << "\tY_pred: " << ds.y_predict[i][0] << endl;
+    for (int j = 0; j < K; j++)
     {
         tmp = 0;
-        for (int j = 0; j < Nd; j++)
+        for (int i = 0; i < Nd; i++)
         {
-            tmp += abs(ds.y[i][j] - ds.y_predict[i][j]) / ds.y[i][j];
+            ttmp = (ds.y.data[i][j] - ds.y_predict.data[i][j]) / ds.y.data[i][j];
+            tmp += (ttmp > 0) ? ttmp : -ttmp;
         }
-        ds.accuracy[i] = 1 - tmp / Nd;
+        tmp /= (double)Nd;
+        if (j < 10)
+            cout << tmp << endl;
+        ds.accuracy[j] = 1.0 - tmp;
     }
     // print accuracy
     cout << "\n===================================\n";

@@ -41,6 +41,8 @@ public:
     void copy(const matrix &source);
     void clear();
     // manipulation
+    void I(const int d, const double val);
+    void I(const int d);
     void T(); // transpose
     void normalize(const std::vector<double> m, const std::vector<double> s);
     void normalize(const matrix &source);

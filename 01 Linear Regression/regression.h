@@ -25,7 +25,7 @@ public:
     void save(const std::string& filename);
     // member
     int M;
-    int s; 
+    double s; 
     std::vector<double> u;
     matrix PHI, wML;
     // dataset

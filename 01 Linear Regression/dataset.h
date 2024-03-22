@@ -23,7 +23,7 @@ public:
     void update();
     void norm();
     void normby(const dataset &source);
-    void designMatrix(const int M, const int s, const std::vector<double> &u);
+    void designMatrix(const int M, const double s, const std::vector<double> &u);
     void save(const std::string& filename); 
     // data
     matrix x,y,y_predict;

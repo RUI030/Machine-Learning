@@ -5,6 +5,9 @@
 #include <iomanip>
 #include <cmath>
 
+
+using namespace std;
+
 // Constructor
 dataset::dataset()
 {
@@ -140,7 +143,7 @@ void dataset::normby(const dataset &source)
     x.normalize(source.x);
     y.normalize(source.y);
 }
-void dataset::designMatrix(const int M, const int s, const std::vector<double> &u)
+void dataset::designMatrix(const int M, const double s, const std::vector<double> &u)
 {
     int N = x.row(); // number of row of data
     int K = x.col(); // number of features
