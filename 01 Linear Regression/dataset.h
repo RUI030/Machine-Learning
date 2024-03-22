@@ -20,14 +20,19 @@ public:
     void copy(const dataset &source);
     void split(dataset &train, dataset &valid, int idx);
     void T();
+    void update();
     void norm();
     void normby(const dataset &source);
+    void designMatrix(const int M, const int s, const std::vector<double> &u);
     void save(const std::string& filename); 
     // data
     matrix x,y,y_predict;
+    // basis function
+    matrix PHI;
     // Variables
     int k,xdim,ydim; // k = #feature = 11 + 1 = xdim + ydim
     int n; // # all data = train + valid = 10000 + 5818
+    std::vector<double>accuracy;
 };
 
 #endif // DATASET_H

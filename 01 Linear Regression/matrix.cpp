@@ -3,17 +3,123 @@
 #include <cmath>
 #include <iomanip>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 using namespace std;
 
-matrix::matrix() : r(0), c(0), Det(0) {}
-matrix::~matrix() {}
+matrix::matrix(int rows, int cols)
+{
+    resize(rows, cols);
+}
+matrix::matrix()
+{
+    matrix(0, 0);
+}
+matrix::~matrix()
+{
+    clear();
+}
+// Element access
+double &matrix::at(int row, int col)
+{
+    if (row < 0 || row >= r || col < 0 || col >= c)
+    {
+        throw std::out_of_range("matrix::at(): index out of range");
+    }
+    return data[row][col];
+}
+const double &matrix::at(int row, int col) const
+{
+    if (row < 0 || row >= r || col < 0 || col >= c)
+    {
+        throw std::out_of_range("matrix::at() const: index out of range");
+    }
+    return data[row][col];
+}
+std::vector<double> &matrix::operator[](int row)
+{
+    return data[row];
+}
+const std::vector<double> &matrix::operator[](int row) const
+{
+    return data[row];
+}
+// Operator overloads
+matrix &matrix::operator=(const matrix &rhs)
+{
+    if (this != &rhs)
+    {
+        copy(rhs);
+    }
+    return *this;
+}
+matrix matrix::operator+(const matrix &rhs) const
+{
+    matrix result = *this;
+    result.add(rhs);
+    return result;
+}
+matrix matrix::operator*(const matrix &rhs) const
+{
+    matrix result = *this;
+    result.dot(rhs);
+    return result;
+}
+matrix matrix::operator*(double scalar) const
+{
+    matrix result = *this;
+    result.scale(scalar);
+    return result;
+}
+matrix matrix::operator*(float scalar) const
+{
+    matrix result = *this;
+    result.scale((double)scalar);
+    return result;
+}
+matrix matrix::operator*(int scalar) const
+{
+    matrix result = *this;
+    result.scale((double)scalar);
+    return result;
+}
+bool matrix::empty()
+{
+    return data.empty();
+}
 int matrix::row() const { return r; }
 int matrix::col() const { return c; }
+std::string matrix::dim() const
+{
+    return "( " + std::to_string(r) + " x " + std::to_string(c) + " )";
+}
 double matrix::det()
 {
     calcDet();
     return Det;
+}
+void matrix::resize(int newRows, int newCols, double fillValue)
+{
+    // Resize each row to the new column size without changing existing values
+    for (auto &row : data)
+    {
+        if (row.size() < newCols)
+        {
+            row.resize(newCols, fillValue);
+        }
+    }
+
+    // Add new rows if the new row count is greater than the current row count
+    while (data.size() < newRows)
+    {
+        data.emplace_back(newCols, fillValue);
+    }
+
+    // Update the number of rows and columns
+    r = newRows;
+    c = newCols;
 }
 void matrix::append(const vector<double> &newRow)
 {
@@ -23,7 +129,7 @@ void matrix::append(const vector<double> &newRow)
              << "\tmatrix:" << c << "\tnew row:" << newRow.size() << endl;
         return;
     }
-    data.push_back(newRow);
+    data.emplace_back(newRow);
     r++;
     c = newRow.size();
 }
@@ -49,7 +155,7 @@ void matrix::append(const matrix &source, int r1, int r2)
     }
     for (int i = r1; i <= r2; i++)
     {
-        data.push_back(source.data[i]);
+        data.emplace_back(source.data[i]);
     }
     r += r2 - r1 + 1;
 }
@@ -66,7 +172,7 @@ void matrix::concat(const matrix &source, int c1, int c2)
         for (int i = 0; i < r; i++)
         {
             std::vector<double> newRow;
-            data.push_back(newRow);
+            data.emplace_back(newRow);
         }
     }
     else if (r != source.row())
@@ -96,7 +202,7 @@ void matrix::concat(const matrix &source)
 void matrix::calcMean()
 {
     double m;
-    Mean.clear();
+    Mean.resize(data[0].size());
     for (int j = 0; j < c; j++)
     {
         m = 0;
@@ -104,13 +210,12 @@ void matrix::calcMean()
         {
             m += data[i][j];
         }
-        m /= r;
-        Mean.push_back(m);
+        Mean[j] = m / r;
     }
 }
 void matrix::calcSTD()
 {
-    STD.clear();
+    STD.resize(data[0].size());
     if (Mean.empty())
         calcMean();
     double sd;
@@ -123,7 +228,7 @@ void matrix::calcSTD()
         }
         sd /= (r - 1);
         sd = sqrt(sd);
-        STD.push_back(sd);
+        STD[j] = sd;
     }
 }
 void matrix::update()
@@ -177,6 +282,7 @@ void matrix::normalize(const std::vector<double> m, const std::vector<double> s)
             data[i][j] = (data[i][j] - m[j]) / s[j];
         }
     }
+    update();
 }
 void matrix::normalize(const matrix &source)
 {
@@ -206,7 +312,7 @@ void matrix::slice(const matrix &source, int r1, int r2, int c1, int c2)
     for (int i = r1; i <= r2; i++)
     {
         vector<double> newRow(source.data[i].begin() + c1, source.data[i].begin() + c2 + 1);
-        this->data.push_back(newRow);
+        this->data.emplace_back(newRow);
     }
 }
 void matrix::slice(const matrix &source, int r1, int r2)
@@ -252,9 +358,9 @@ void matrix::sub(const matrix &source)
 }
 void matrix::dot(const matrix &source)
 {
-    if (c != source.r)
+    if (c != source.row())
     {
-        cout << "\033[1;31m[FAIL]: mismatched dimensions for matrix multiplication.\033[0m" << endl;
+        cout << "\033[1;31m[FAIL]: mismatched dimensions for matrix multiplication. " << dim() << " . " << source.dim() << "\033[0m" << endl;
         return;
     }
     vector<vector<double>> result(r, vector<double>(source.c, 0));
@@ -269,7 +375,7 @@ void matrix::dot(const matrix &source)
         }
     }
     data = result;
-    c = source.c;
+    c = source.col();
 }
 void matrix::scale(double val)
 {
@@ -393,6 +499,16 @@ void matrix::inv()
     // Copy the result back to the original matrix
     data = inv;
 }
+void matrix::abs()
+{
+    for (int i = 0; i < row(); i++)
+    {
+        for (int j = 0; j < col(); j++)
+        {
+            (data[i][j] < 0) ? -data[i][j] : data[i][j];
+        }
+    }
+}
 void matrix::printRow(int ri, int l)
 {
     if (ri < 0 || ri >= r)
@@ -439,6 +555,61 @@ void matrix::stat()
     {
         cout << setw(10) << STD[j];
     }
-    cout << "\n\n=======================================\n" << endl;
+    cout << "\n\n=======================================\n"
+         << endl;
+}
+void matrix::read(const std::string &filename)
+{
+    std::ifstream file(filename);
+    std::string line;
+    data.clear();
+    r = 0;
+    c = 0;
 
+    while (std::getline(file, line))
+    {
+        std::istringstream ss(line);
+        std::string value;
+        std::vector<double> row;
+
+        while (std::getline(ss, value, ','))
+        {
+            row.push_back(std::stod(value));
+        }
+
+        if (c == 0)
+        {
+            c = row.size();
+        }
+        else if (c != row.size())
+        {
+            std::cerr << "Error: Inconsistent number of columns in row " << r + 1 << std::endl;
+            file.close();
+            return;
+        }
+
+        data.push_back(row);
+        ++r;
+    }
+
+    file.close();
+}
+void matrix::save(const std::string &filename) const
+{
+    std::ofstream file(filename);
+
+    for (const auto &row : data)
+    {
+        for (size_t i = 0; i < row.size(); ++i)
+        {
+            file << row[i];
+            if (i < row.size() - 1)
+            {
+                file << ",";
+            }
+        }
+        file << "\n";
+    }
+
+    file.close();
 }

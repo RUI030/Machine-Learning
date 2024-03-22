@@ -12,6 +12,7 @@ Execute:
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include "regression.h"
 
 using namespace std;
@@ -19,14 +20,10 @@ using namespace std;
 int main()
 {
     dataset song, train, valid;
-    song.read("HW1.csv");
-    // song.print();
-    song.split(train,valid,10000);
-    // Preprocessing
-    train.x.normalize();
-    valid.x.normalize(train.x);
-    train.x.update();
-    valid.x.update();
-    
+    LinearRegression model(5);
+    song.read("HW1.csv"); // load data
+    model.prep(song,10000);
+    model.update();
+    model.eval();
     return 0;
 }
