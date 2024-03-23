@@ -58,19 +58,16 @@ C:\toolbox
 
 # Debugging
 ## using `cl` to compile the project
-* **Reference**: [compile the code in vscode](https://code.visualstudio.com/docs/languages/cpp)
 > [!IMPORTANT]
 > **YOU NEED TO** [**OPEN VSCODE USING Developer Command Prompt for VS 2022 WITH THE COMMAND CODE**](#open-vscode-with-command-code)
+> **Reference**: [compile the code in vscode](https://code.visualstudio.com/docs/languages/cpp)
+
 1. Install the C/C++ plug-in in VSCode
-
 2. Install [**MinGW**](https://www.mingw-w64.org/downloads/) with the [instructions](https://code.visualstudio.com/docs/cpp/config-mingw#_create-a-hello-world-app). Please make sure the host correspond to your OS, for example I use Windows 11, and I installed [MSYS2](https://www.msys2.org/)
-
-3. After installation, find **`MSYS2 MINGW64`** in the search bar in your computer (the place you search for software applications :) ) and past the following command into the terminal:
+3. After installation, find **`MSYS2 MINGW64`** in the search bar in your computer (the place you search for software applications :) ) and past the following command into the terminal: (press **`Enter`** or **`Y`** while needed :) )
 ```
 pacman -S --needed base-devel mingw-w64-ucrt-x86_64-toolchain
 ```
-  press **`Enter`** or **`Y`** while needed :)
-
 4. Add environment path (the path that you installed MinGW) to your computer. check [here](#adding-environment-path) for detailed instructions. default path should be: 
 ```
 C:\msys64\ucrt64\bin
@@ -107,11 +104,11 @@ C:\Users\RUI\AppData\Local\Programs\Microsoft VS Code\bin
 3. Find and click on **`Path`** in `Users variable` `使用者環境變數`
 4. Click **`Edit`** `編輯(E)`, then click **`New`** `新增(N)`
 5. Type , press **`Enter`**, and  press every **`OK`**.
-   * MinGW (default): 
+  * MinGW (default): 
 ```
 C:\msys64\ucrt64\bin
 ```
-   * VSCode `code.` (example, please remember to **change the username**):
+  * VSCode `code.` (example, please remember to **change the username**):
 ```
 C:\Users\RUI\AppData\Local\Programs\Microsoft VS Code\bin
 ```
