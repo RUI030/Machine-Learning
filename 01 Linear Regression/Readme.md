@@ -14,7 +14,8 @@ g++ -std=c++11 -o main main.cpp regression.cpp dataset.cpp matrix.cpp
 ```
 ./main
 ```
-## Dependency
+
+# Dependency
 This project use [**eigen**](https://eigen.tuxfamily.org/index.php?title=Main_Page) for *Singular Value Decomposition* (SVD), you can follow the steps in the [video](https://www.youtube.com/watch?v=fUxp3upZsk0&ab_channel=AleksandarHaber) to install the library for vscode users.
 1. [Download eigen here](https://eigen.tuxfamily.org/index.php?title=Main_Page)
 2. Unzip the file to the path you want, for example I put it at
@@ -28,6 +29,34 @@ C:\toolbox
 7. Open **`task.json`** and modify
 8. Press **`Ctrl`** + **`Shift`** + **`P`**, search **`C/C++ Edit Configuration (UI)`**
 9. Open **`c_cpp_properties.json`** in the folder **`.vscode`** and modify it
+
+# Class
+## Matrix
+* **`clear`** : clear the matrix
+* **`print`** : print the matrix in the terminal
+* **`copy`** : copy from another matrix
+* **`append`** : append a new row or multiple rows
+* **`concat`** : concatenate the matrix with another one
+* **`fill`** : fill the matrix with given value
+* **`scale`** : scale each element with given scalar
+* **`slice`** : create a submatrix from another matrix given the range of row and column indecies
+* **`add`** / **`sub`** : add/sub the matrix itself with another matrix
+* **`dot`** : inner product the matrix itself with another matrix
+* **`update`** : update the mean value and standard deviation of each column
+* **`normalize`** : normalize the matrix by column (or given another group of mean and standard deviation)
+### operator
+* **`=`** : copy the matrix from the rhs.
+* **`+`** : adding 2 matrices. NOT CONCAT!!!!!! (the two matrix should have the same dimension)
+* **`*`** : the inner product of 2 matrices
+> [!NOTE]  
+> **Todo:**
+> * a lot of Linear algebra stuff :(
+
+## Dataset
+
+## Regression
+
+# Debugging
 ## Adding Environment `Path`
 1. open **`Setting`** `設定` (or directly search the stuff in step ii)
 2. search **`Edit environment variables for your account`** (the search bar should be at the upper left corner of the window you opened from step i) `編輯您的帳戶的環境變數` (直接找 `環境變數` 應該就能找到)
@@ -42,8 +71,7 @@ C:\msys64\ucrt64\bin
 ```
 C:\Users\RUI\AppData\Local\Programs\Microsoft VS Code\bin
 ```
-## Debugging
-### using `cl` to compile the project
+## using `cl` to compile the project
 > Reference: [compile the code in vscode](https://code.visualstudio.com/docs/languages/cpp)
 1. install the C/C++ plug-in in VSCode
 
@@ -83,30 +111,4 @@ C:\Users\RUI\AppData\Local\Programs\Microsoft VS Code\bin
 ```
 ### still can not compile
 * Install [**`Windows SDK`**](https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/)
-
-## Matrix
-* **`clear`** : clear the matrix
-* **`print`** : print the matrix in the terminal
-* **`copy`** : copy from another matrix
-* **`append`** : append a new row or multiple rows
-* **`concat`** : concatenate the matrix with another one
-* **`fill`** : fill the matrix with given value
-* **`scale`** : scale each element with given scalar
-* **`slice`** : create a submatrix from another matrix given the range of row and column indecies
-* **`add`** / **`sub`** : add/sub the matrix itself with another matrix
-* **`dot`** : inner product the matrix itself with another matrix
-* **`update`** : update the mean value and standard deviation of each column
-* **`normalize`** : normalize the matrix by column (or given another group of mean and standard deviation)
-### operator
-* **`=`** : copy the matrix from the rhs.
-* **`+`** : adding 2 matrices. NOT CONCAT!!!!!! (the two matrix should have the same dimension)
-* **`*`** : the inner product of 2 matrices
-> [!NOTE]  
-> **Todo:**
-> * a lot of Linear algebra stuff :(
-## Dataset
-### Function:
-
-## Regression
-
 
