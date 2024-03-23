@@ -1,10 +1,8 @@
 # Linear Regression
-> [!CAUTION]
-> Makefile and the model itself are not finished yet.
 
 ## Run this code
 > [!CAUTION]
-> It's not working now :(
+> g++ is not working now :(
 > Please [compile it with cl](#using-cl-to-compile-the-project) in VSCode
 * Compile:
 ```
