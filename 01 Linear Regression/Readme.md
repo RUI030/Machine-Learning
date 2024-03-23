@@ -116,4 +116,4 @@ C:\Users\RUI\AppData\Local\Programs\Microsoft VS Code\bin
 just some dumb questions.
 ## file read write
 * create the folder before read/write the file
-* in C++ both `/` and `\` works, but \ should be \\ in the path, see [escape characters](https://zh.wikipedia.org/zh-tw/%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6)
+* in C++ both `/` and `\` works, but \ should be \\\ in the path, see [escape characters](https://zh.wikipedia.org/zh-tw/%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6)
