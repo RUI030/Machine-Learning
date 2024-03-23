@@ -27,7 +27,7 @@ C:\toolbox
 4. click **`Edit`** `編輯(E)`, then click **`New`** `新增(N)`
 5. type , press **`Enter`**, and  press every **`OK`**.
    * MinGW (default): 
-   ```
+```
 C:\msys64\ucrt64\bin
 ```
    * VSCode `code.` (example):
@@ -39,16 +39,17 @@ C:\Users\RUI\AppData\Local\Programs\Microsoft VS Code\bin
 a. install the C/C++ plug-in in VSCode
   b. install [**MinGW**](https://www.mingw-w64.org/downloads/) with the [instructions](https://code.visualstudio.com/docs/cpp/config-mingw#_create-a-hello-world-app). Please make sure the host correspond to your OS, for example I use Windows 11, and I installed [MSYS2](https://www.msys2.org/)
   c. after installation, find **`MSYS2 MINGW64`** in the search bar in your computer (the place you search for software applications :) ) and past the following command into the terminal:
-  ```
-  pacman -S --needed base-devel mingw-w64-ucrt-x86_64-toolchain
+```
+pacman -S --needed base-devel mingw-w64-ucrt-x86_64-toolchain
 ```
   press **`Enter`** or **`Y`** while needed :)
   d. add environment path (the path that you installed MinGW) to your computer. check [here](#adding-environment-path) for detailed instructions. default path should be: 
-    ```
-    C:\msys64\ucrt64\bin
-    ```
+```
+C:\msys64\ucrt64\bin
+```
   e. search `cmd` in the search bar then paste the following command to check if you successfully installed MinGW
-     ```gcc --version
+```
+gcc --version
 g++ --version
 gdb --version
 ```
