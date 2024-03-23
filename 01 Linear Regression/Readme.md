@@ -5,7 +5,7 @@
 ## Run this code
 > [!CAUTION]
 > It's not working now :(
-> Please [compile it with `cl`](#using-cl-to-compile-the-project) in VSCode
+> Please [compile it with cl](#using-cl-to-compile-the-project) in VSCode
 * Compile:
 ```
 g++ -std=c++11 -o main main.cpp regression.cpp dataset.cpp matrix.cpp
@@ -23,7 +23,7 @@ This project use [**eigen**](https://eigen.tuxfamily.org/index.php?title=Main_Pa
 C:\toolbox
 ```
 3. Make sure you are able to [compile the code in vscode](#using-cl-to-compile-the-project) with `cl` .
-4. [Open VSCode with command `code.`](#open-vscode-with-command-code)
+4. [Open VSCode with command code.](#open-vscode-with-command-code)
 5. Press the triangle button (Run C/C++) at the top right of the window
 6. Find the folder **`.vscode`** which should be in your project directory
 7. Open **`task.json`** and modify
