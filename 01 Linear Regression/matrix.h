@@ -57,6 +57,7 @@ public:
     void calcDet();
     void inv();
     void abs();
+    void svd(matrix &U, matrix &Sigma, matrix &V) const;
     // show
     void printRow(int ri, int l);
     void printRow(int ri);

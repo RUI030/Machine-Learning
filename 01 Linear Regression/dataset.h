@@ -21,8 +21,9 @@ public:
     void split(dataset &train, dataset &valid, int idx);
     void T();
     void update();
-    void norm();
-    void normby(const dataset &source);
+    void normalize(const std::vector<double> m, const std::vector<double> s, const std::vector<double> m_y, const std::vector<double> s_y);
+    void normalize(const dataset &source);
+    void normalize();
     void designMatrix(const int M, const double s, const std::vector<double> &u);
     void save(const std::string& filename); 
     // data

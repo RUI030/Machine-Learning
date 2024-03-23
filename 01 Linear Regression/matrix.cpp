@@ -6,8 +6,12 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <Eigen/Dense>
 
 using namespace std;
+
+// Eigen tutorial
+// https://www.youtube.com/watch?v=fUxp3upZsk0&ab_channel=AleksandarHaber
 
 matrix::matrix(int rows, int cols)
 {
@@ -517,7 +521,50 @@ void matrix::abs()
     {
         for (int j = 0; j < col(); j++)
         {
-            (data[i][j] < 0) ? -data[i][j] : data[i][j];
+            data[i][j] = (data[i][j] < 0) ? -data[i][j] : data[i][j];
+        }
+    }
+}
+void matrix::svd(matrix &U, matrix &Sigma, matrix &V) const
+{
+    Eigen::MatrixXd eigMat(r, c);
+    for (int i = 0; i < r; ++i)
+    {
+        for (int j = 0; j < c; ++j)
+        {
+            eigMat(i, j) = data[i][j];
+        }
+    }
+
+    Eigen::JacobiSVD<Eigen::MatrixXd> svd(eigMat, Eigen::ComputeThinU | Eigen::ComputeThinV);
+    Eigen::MatrixXd U_eig = svd.matrixU();
+    Eigen::MatrixXd Sigma_eig = svd.singularValues().asDiagonal();
+    Eigen::MatrixXd V_eig = svd.matrixV();
+
+    U.resize(U_eig.rows(), U_eig.cols());
+    for (int i = 0; i < U_eig.rows(); ++i)
+    {
+        for (int j = 0; j < U_eig.cols(); ++j)
+        {
+            U.data[i][j] = U_eig(i, j);
+        }
+    }
+
+    Sigma.resize(Sigma_eig.rows(), Sigma_eig.cols());
+    for (int i = 0; i < Sigma_eig.rows(); ++i)
+    {
+        for (int j = 0; j < Sigma_eig.cols(); ++j)
+        {
+            Sigma.data[i][j] = Sigma_eig(i, j);
+        }
+    }
+
+    V.resize(V_eig.rows(), V_eig.cols());
+    for (int i = 0; i < V_eig.rows(); ++i)
+    {
+        for (int j = 0; j < V_eig.cols(); ++j)
+        {
+            V.data[i][j] = V_eig(i, j);
         }
     }
 }

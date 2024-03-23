@@ -5,7 +5,6 @@
 #include <iomanip>
 #include <cmath>
 
-
 using namespace std;
 
 // Constructor
@@ -133,16 +132,22 @@ void dataset::update()
     x.update();
     y.update();
 }
-void dataset::norm()
+void dataset::normalize(const std::vector<double> m, const std::vector<double> s, const std::vector<double> m_y, const std::vector<double> s_y)
 {
-    x.normalize();
-    y.normalize();
+    x.normalize(m, s);
+    y.normalize(m_y, s_y);
 }
-void dataset::normby(const dataset &source)
+void dataset::normalize(const dataset &source)
 {
     x.normalize(source.x);
     y.normalize(source.y);
 }
+void dataset::normalize()
+{
+    x.normalize();
+    y.normalize();
+}
+
 void dataset::designMatrix(const int M, const double s, const std::vector<double> &u)
 {
     int N = x.row(); // number of row of data
@@ -154,10 +159,10 @@ void dataset::designMatrix(const int M, const double s, const std::vector<double
     {
         for (int k = 0; k < K; k++) // concatenate the design matrix of different feature
         {
-            PHI[i][k * M] = 1; // phi(x) = 1 while j = 0 ==> reduncdant item for convenience
+            PHI[i][k * M] = 1; // phi(x) = 1 while j = 0 ==> redundant item for convenience
             for (int j = 1; j < M; j++)
             {
-                PHI[i][k * M + j] = 1 / (1 + exp((x[i][k] - u[j]) / s));
+                PHI[i][k * M + j] = 1 / (1 + exp(-(x[i][k] - u[j]) / s)); // note the negative sign in the exponent
             }
         }
     }

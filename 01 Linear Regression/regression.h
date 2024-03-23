@@ -18,8 +18,11 @@ public:
     void update(const dataset &ds);
     void update();
     void predict(dataset &ds);
+    void eval(dataset &ds, bool doNorm); //if valid.y_predict is empty, predict first
     void eval(dataset &ds); //if valid.y_predict is empty, predict first
     void eval(); //if valid.y_predict is empty, predict first
+    void normalize(matrix &input);
+    void normalize(dataset &input);
     // read & save
     void load(const std::string& filename);
     void save(const std::string& filename);
@@ -30,6 +33,6 @@ public:
     matrix PHI, wML;
     // dataset
     dataset train, valid;
-    std::vector<double> mean, sd;   // for new data
+    std::vector<double> mean, sd, mean_y, sd_y;   // for new data
 };
 #endif
