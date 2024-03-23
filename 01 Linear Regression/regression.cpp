@@ -1,13 +1,13 @@
 #include "regression.h"
 #include <cmath>
 #include <string>
+#include <iomanip>
 
 using namespace std;
 
 LinearRegression::LinearRegression(int m)
 {
     setting(m);
-    name = "RegressionModel_M" + to_string(m);
 }
 LinearRegression::LinearRegression()
 {
@@ -124,29 +124,29 @@ void LinearRegression::update()
 }
 void LinearRegression::predict(dataset &ds)
 {
-    std::cout << "...predicting..." << std::endl;
+    // std::cout << "...predicting..." << std::endl;
     // only update y_predict
     ds.designMatrix(M, s, u);
-    cout << "PHI_val_dim:" << ds.PHI.dim() << "\twML_dim:" << wML.dim() << endl;
+    // cout << "PHI_val_dim:" << ds.PHI.dim() << "\twML_dim:" << wML.dim() << endl;
     ds.y_predict = ds.PHI * wML;
-    std::cout << "y_predicted: " << ds.y_predict.dim() << std::endl;
-    std::cout << "\033[1;32mSuccessfully predicted the output!\033[0m" << std::endl;
+    // std::cout << "y_predicted: " << ds.y_predict.dim() << std::endl;
+    // std::cout << "\033[1;32mSuccessfully predicted the output!\033[0m" << std::endl;
 }
 void LinearRegression::eval(dataset &ds, bool doNorm)
 {
     if (doNorm)
         normalize(ds);
     predict(ds);
-    std::cout << "...evaluating..." << std::endl;
+    // std::cout << "...evaluating..." << std::endl;
     int Nd = ds.y.row();
     int K = ds.y.col();
-    std::cout << "Nd: " << Nd << "\tK: " << K << std::endl;
+    // std::cout << "Nd: " << Nd << "\tK: " << K << std::endl;
     double tmp, ttmp, nd, a, b;
     nd = (double)Nd;
     ds.accuracy.resize(K);
-    cout << "Y_dim:" << ds.y.dim() << "\tY_pred_dim:" << ds.y_predict.dim() << endl;
-    for (int i = 0; i < 10; i++)
-        std::cout << "Y: " << ds.y[i][0] << "\tY_pred: " << ds.y_predict[i][0] << endl;
+    // cout << "Y_dim:" << ds.y.dim() << "\tY_pred_dim:" << ds.y_predict.dim() << endl;
+    // for (int i = 0; i < 10; i++)
+    //     std::cout << "Y: " << ds.y[i][0] << "\tY_pred: " << ds.y_predict[i][0] << endl;
     for (int j = 0; j < K; j++)
     {
         tmp = 0.0;
@@ -158,22 +158,23 @@ void LinearRegression::eval(dataset &ds, bool doNorm)
             ttmp = a ? abs((a - b) / a) : abs(a - b);
             // tmp += (ttmp > 1.0) ? 1.0 : ttmp;
             tmp += ttmp;
-            if (ttmp > 1.0)
-                cout << a << "\t" << b << "\t" << ttmp << endl;
+            // print large error
+            // if (ttmp > 1.0)
+            //     cout << a << "\t" << b << "\t" << ttmp << endl;
         }
-        cout << "tmp: " << tmp << endl;
+        // cout << "tmp: " << tmp << endl;
         tmp /= nd;
         ds.accuracy[j] = 1.0 - tmp;
     }
 
     // Print accuracy
-    std::cout << "\n===================================\n";
-    std::cout << "[ACCURACY]:";
+    // std::cout << "\n===================================\n";
+    std::cout << name << " [ACCURACY]:";
     for (size_t i = 0; i < ds.accuracy.size(); i++)
     {
-        std::cout << "\t" << ds.accuracy[i];
+        std::cout << setw(12) << ds.accuracy[i];
     }
-    std::cout << "\n===================================\n";
+    // std::cout << "\n===================================\n";
 }
 void LinearRegression::eval(dataset &ds)
 {
@@ -181,9 +182,11 @@ void LinearRegression::eval(dataset &ds)
 }
 void LinearRegression::eval()
 {
-    cout << "\nTrain ======================================\n";
+    // cout << "\n\033[36m>>>>>>>>>>>>>>>>>>> Train >>>>>>>>>>>>>>>>>>>\033[0m\n";
+    cout << "\n\033[36m>>> Train >>> \033[0m";
     eval(train, 0);
-    cout << "\nValid ======================================\n";
+    // cout << "\n\033[35m<<<<<<<<<<<<<<<<<<< Valid <<<<<<<<<<<<<<<<<<<\033[0m\n";
+    cout << "\n\033[35m<<< Valid <<< \033[0m";
     eval(valid, 0);
 }
 void LinearRegression::normalize(matrix &input)
@@ -198,6 +201,7 @@ void LinearRegression::setting(const int _m, const double _s)
 {
     M = (double)_m;
     s = _s;
+    name = "RegressionModel_M" + to_string(_m);
     u.clear();
     u.push_back(0.0); // reduncdant term for convenience
     for (double j = 1; j < M; j++)
@@ -209,22 +213,22 @@ void LinearRegression::setting(const int _m)
 {
     setting(_m, 0.1);
 }
-void LinearRegression::rename(const std::string& modelName)
+void LinearRegression::rename(const std::string &modelName)
 {
     name = modelName;
 }
-void LinearRegression::load(const std::string& modelName, const std::string& pre)
+void LinearRegression::load(const std::string &modelName, const std::string &pre)
 {
     std::string _wML = pre + modelName + ".csv";
     std::string _set = pre + modelName + "_setting.csv";
     wML.read(_wML);
     matrix tmp;
     tmp.read(_set);
-    M=tmp[0][0];
-    s=tmp[0][1];
+    M = tmp[0][0];
+    s = tmp[0][1];
     setting(M, s);
 }
-void LinearRegression::load(const std::string& modelName)
+void LinearRegression::load(const std::string &modelName)
 {
     load(modelName, "model/");
 }
@@ -233,17 +237,17 @@ void LinearRegression::load(const int _m)
     string mn = "RegressionModel_M" + to_string(_m);
     load(mn, "model/");
 }
-void LinearRegression::save(const std::string& modelName, const std::string& pre)
+void LinearRegression::save(const std::string &modelName, const std::string &pre)
 {
     std::string _wML = pre + modelName + ".csv";
     std::string _set = pre + modelName + "_setting.csv";
-    matrix tmp(1,2);
-    tmp[0][0]=M;
-    tmp[0][1]=s;
+    matrix tmp(1, 2);
+    tmp[0][0] = M;
+    tmp[0][1] = s;
     tmp.save(_set);
     wML.save(_wML);
 }
-void LinearRegression::save(const std::string& modelName)
+void LinearRegression::save(const std::string &modelName)
 {
     save(modelName, "model/");
 }
