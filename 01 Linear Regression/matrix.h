@@ -43,6 +43,7 @@ public:
     // manipulation
     void I(const int d, const double val);
     void I(const int d);
+    void range(const double start, const double stop, const int step);
     void T(); // transpose
     void normalize(const std::vector<double> m, const std::vector<double> s);
     void normalize(const matrix &source);

@@ -33,7 +33,7 @@ public:
     // Variables
     int k,xdim,ydim; // k = #feature = 11 + 1 = xdim + ydim
     int n; // # all data = train + valid = 10000 + 5818
-    std::vector<double>accuracy;
+    std::vector<double>accuracy, MSE;
 };
 
 #endif // DATASET_H

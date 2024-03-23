@@ -14,6 +14,9 @@ public:
     ~LinearRegression();
     void prep(dataset &ds, int i);
     void prep(dataset &ds);
+    double basisFunction(double val, int k, int j, int m, double S, double uj);
+    double basisFunction(double val, int k, int j, int m);
+    double basisFunction(double val, int k, int j);
     void update(const matrix &X, const matrix &t);
     void update(const dataset &ds);
     void update();

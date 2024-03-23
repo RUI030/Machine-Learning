@@ -274,6 +274,18 @@ void matrix::I(const int d)
 {
     I(d, 1.0);
 }
+void matrix::range(const double start, const double stop, const int step)
+{
+    resize(1, step);
+    double a, b;
+    a = start;
+    b = (stop - start) / (double)step;
+    for (int i = 0; i < step; i++)
+    {
+        data[0][i] = a;
+        a += b;
+    }
+}
 void matrix::T()
 {
     vector<vector<double>> newData(c, vector<double>(r));
@@ -693,3 +705,5 @@ void matrix::save(const std::string &filename) const
 
     file.close();
 }
+// reshape: preserve the element while resizing
+// arange:

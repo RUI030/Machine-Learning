@@ -10,6 +10,7 @@ Execute (for different functions):
 ./main
 ./train
 ./test
+
 ===========================================
 */
 
@@ -23,11 +24,10 @@ using namespace std;
 int main()
 {
     int M = 5;
-    dataset song, train, valid;
+    dataset song;
     LinearRegression model(M);
     song.read("HW1.csv"); // load data
     model.load(M);
-    model.prep(song,10000);
-    model.eval();
+    model.eval(song);
     return 0;
 }

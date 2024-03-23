@@ -114,6 +114,18 @@ void LinearRegression::update(const matrix &X, const matrix &t)
 
     std::cout << "\033[1;32mSuccessfully updated wML!\033[0m" << std::endl;
 }
+double LinearRegression::basisFunction(double val, int k, int j, int m, double S, double uj)
+{
+    return (j) ? (1.0 / (1.0 + exp(-(val - uj) / s))) : 1;
+}
+double LinearRegression::basisFunction(double val, int k, int j, int m)
+{
+    return basisFunction(val, k, j, m, s, u[j]);
+}
+double LinearRegression::basisFunction(double val, int k, int j)
+{
+    return basisFunction(val, k, j, M, s, u[j]);
+}
 void LinearRegression::update(const dataset &ds)
 {
     update(ds.x, ds.y);
@@ -141,38 +153,49 @@ void LinearRegression::eval(dataset &ds, bool doNorm)
     int Nd = ds.y.row();
     int K = ds.y.col();
     // std::cout << "Nd: " << Nd << "\tK: " << K << std::endl;
-    double tmp, ttmp, nd, a, b;
+    double tmp, ttmp, tmp1, ttmp1, nd, a, b;
     nd = (double)Nd;
     ds.accuracy.resize(K);
+    ds.MSE.resize(K);
     // cout << "Y_dim:" << ds.y.dim() << "\tY_pred_dim:" << ds.y_predict.dim() << endl;
     // for (int i = 0; i < 10; i++)
     //     std::cout << "Y: " << ds.y[i][0] << "\tY_pred: " << ds.y_predict[i][0] << endl;
     for (int j = 0; j < K; j++)
     {
         tmp = 0.0;
+        tmp1 = 0.0;
         for (int i = 0; i < Nd; i++)
         {
             // if y too small it cause inf!!!
             a = ds.y[i][j];
             b = ds.y_predict[i][j];
             ttmp = a ? abs((a - b) / a) : abs(a - b);
+            ttmp1 = pow((a-b),2);
             // tmp += (ttmp > 1.0) ? 1.0 : ttmp;
             tmp += ttmp;
+            tmp1 +=ttmp1;
             // print large error
             // if (ttmp > 1.0)
             //     cout << a << "\t" << b << "\t" << ttmp << endl;
         }
         // cout << "tmp: " << tmp << endl;
         tmp /= nd;
+        tmp1 /= nd;
         ds.accuracy[j] = 1.0 - tmp;
+        ds.MSE[j] = tmp1;
     }
 
     // Print accuracy
     // std::cout << "\n===================================\n";
-    std::cout << name << " [ACCURACY]:";
+    std::cout << name << "\t[ACC]:";
     for (size_t i = 0; i < ds.accuracy.size(); i++)
     {
         std::cout << setw(12) << ds.accuracy[i];
+    }
+    std::cout << "\t[MSE]:";
+    for (size_t i = 0; i < ds.accuracy.size(); i++)
+    {
+        std::cout << setw(12) << ds.MSE[i];
     }
     // std::cout << "\n===================================\n";
 }
@@ -221,12 +244,22 @@ void LinearRegression::load(const std::string &modelName, const std::string &pre
 {
     std::string _wML = pre + modelName + ".csv";
     std::string _set = pre + modelName + "_setting.csv";
+    std::string _mean = pre + modelName + "_mean.csv";
+    std::string _sd = pre + modelName + "_sd.csv";
+    // weights
     wML.read(_wML);
+    // setting: gaussian noise (basis function) parameter
     matrix tmp;
     tmp.read(_set);
     M = tmp[0][0];
     s = tmp[0][1];
     setting(M, s);
+    // mean ans std
+    matrix MEAN, SD;
+    MEAN.read(_mean);
+    SD.read(_sd);
+    mean = MEAN.data[0];
+    sd = SD.data[0];
 }
 void LinearRegression::load(const std::string &modelName)
 {
@@ -241,11 +274,18 @@ void LinearRegression::save(const std::string &modelName, const std::string &pre
 {
     std::string _wML = pre + modelName + ".csv";
     std::string _set = pre + modelName + "_setting.csv";
+    std::string _mean = pre + modelName + "_mean.csv";
+    std::string _sd = pre + modelName + "_sd.csv";
     matrix tmp(1, 2);
     tmp[0][0] = M;
     tmp[0][1] = s;
+    matrix MEAN, SD;
+    MEAN.append(mean);
+    SD.append(sd);
     tmp.save(_set);
     wML.save(_wML);
+    MEAN.save(_mean);
+    SD.save(_sd);
 }
 void LinearRegression::save(const std::string &modelName)
 {
