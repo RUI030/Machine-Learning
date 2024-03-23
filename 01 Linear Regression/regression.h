@@ -23,16 +23,23 @@ public:
     void eval(); //if valid.y_predict is empty, predict first
     void normalize(matrix &input);
     void normalize(dataset &input);
+    void setting(const int _m, const double _s);
+    void setting(const int _m);
     // read & save
-    void load(const std::string& filename);
-    void save(const std::string& filename);
+    void rename(const std::string& modelName);
+    void load(const std::string& modelName, const std::string& pre);
+    void load(const std::string& modelName);
+    void load(const int _m);
+    void save(const std::string& modelName, const std::string& pre);
+    void save(const std::string& modelName);
+    void save();
     // member
-    int M;
-    double s; 
+    double M, s; 
     std::vector<double> u;
     matrix PHI, wML;
     // dataset
     dataset train, valid;
     std::vector<double> mean, sd, mean_y, sd_y;   // for new data
+    std::string name;
 };
 #endif

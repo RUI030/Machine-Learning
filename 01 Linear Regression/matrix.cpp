@@ -624,7 +624,11 @@ void matrix::read(const std::string &filename)
     data.clear();
     r = 0;
     c = 0;
-
+    if (!file.is_open())
+    {
+        std::cerr << "Error: Unable to open file " << filename << std::endl;
+        return;
+    }
     while (std::getline(file, line))
     {
         std::istringstream ss(line);
@@ -633,9 +637,23 @@ void matrix::read(const std::string &filename)
 
         while (std::getline(ss, value, ','))
         {
-            row.push_back(std::stod(value));
+            try
+            {
+                row.push_back(std::stod(value));
+            }
+            catch (const std::invalid_argument &e)
+            {
+                std::cerr << "Error: Invalid argument in row " << r + 1 << ", column " << row.size() + 1 << std::endl;
+                file.close();
+                return;
+            }
+            catch (const std::out_of_range &e)
+            {
+                std::cerr << "Error: Out of range value in row " << r + 1 << ", column " << row.size() + 1 << std::endl;
+                file.close();
+                return;
+            }
         }
-
         if (c == 0)
         {
             c = row.size();
@@ -646,7 +664,6 @@ void matrix::read(const std::string &filename)
             file.close();
             return;
         }
-
         data.push_back(row);
         ++r;
     }
@@ -656,7 +673,11 @@ void matrix::read(const std::string &filename)
 void matrix::save(const std::string &filename) const
 {
     std::ofstream file(filename);
-
+    if (!file.is_open())
+    {
+        std::cerr << "Error: Unable to open file " << filename << std::endl;
+        return;
+    }
     for (const auto &row : data)
     {
         for (size_t i = 0; i < row.size(); ++i)

@@ -1,23 +1,17 @@
 #include "regression.h"
 #include <cmath>
+#include <string>
 
 using namespace std;
 
 LinearRegression::LinearRegression(int m)
 {
-    M = m;
-    s = 0.1;
-    u.clear();
-    u.push_back(0.0); // reduncdant term for convenience
-    double Md = (double)m;
-    for (double j = 1; j < M; j++)
-    {
-        u.push_back((3.0 * (-Md + 1 + 2 * (j - 1) * (Md - 1) / (Md - 2))) / Md);
-    }
+    setting(m);
+    name = "RegressionModel_M" + to_string(m);
 }
 LinearRegression::LinearRegression()
 {
-    LinearRegression(15);
+    LinearRegression(5);
 }
 LinearRegression::~LinearRegression()
 {
@@ -199,4 +193,61 @@ void LinearRegression::normalize(matrix &input)
 void LinearRegression::normalize(dataset &input)
 {
     normalize(input.x);
+}
+void LinearRegression::setting(const int _m, const double _s)
+{
+    M = (double)_m;
+    s = _s;
+    u.clear();
+    u.push_back(0.0); // reduncdant term for convenience
+    for (double j = 1; j < M; j++)
+    {
+        u.push_back((3.0 * (-M + 1 + 2 * (j - 1) * (M - 1) / (M - 2))) / M);
+    }
+}
+void LinearRegression::setting(const int _m)
+{
+    setting(_m, 0.1);
+}
+void LinearRegression::rename(const std::string& modelName)
+{
+    name = modelName;
+}
+void LinearRegression::load(const std::string& modelName, const std::string& pre)
+{
+    std::string _wML = pre + modelName + ".csv";
+    std::string _set = pre + modelName + "_setting.csv";
+    wML.read(_wML);
+    matrix tmp;
+    tmp.read(_set);
+    M=tmp[0][0];
+    s=tmp[0][1];
+    setting(M, s);
+}
+void LinearRegression::load(const std::string& modelName)
+{
+    load(modelName, "model/");
+}
+void LinearRegression::load(const int _m)
+{
+    string mn = "RegressionModel_M" + to_string(_m);
+    load(mn, "model/");
+}
+void LinearRegression::save(const std::string& modelName, const std::string& pre)
+{
+    std::string _wML = pre + modelName + ".csv";
+    std::string _set = pre + modelName + "_setting.csv";
+    matrix tmp(1,2);
+    tmp[0][0]=M;
+    tmp[0][1]=s;
+    tmp.save(_set);
+    wML.save(_wML);
+}
+void LinearRegression::save(const std::string& modelName)
+{
+    save(modelName, "model/");
+}
+void LinearRegression::save()
+{
+    save(name);
 }
