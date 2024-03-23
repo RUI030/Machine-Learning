@@ -57,20 +57,6 @@ C:\toolbox
 ## Regression
 
 # Debugging
-## Adding Environment `Path`
-1. Open **`Setting`** `設定` (or directly search the stuff in step ii)
-2. Search **`Edit environment variables for your account`** (the search bar should be at the upper left corner of the window you opened from step i) `編輯您的帳戶的環境變數` (直接找 `環境變數` 應該就能找到)
-3. Find and click on **`Path`** in `Users variable` `使用者環境變數`
-4. Click **`Edit`** `編輯(E)`, then click **`New`** `新增(N)`
-5. Type , press **`Enter`**, and  press every **`OK`**.
-   * MinGW (default): 
-```
-C:\msys64\ucrt64\bin
-```
-   * VSCode `code.` (example):
-```
-C:\Users\RUI\AppData\Local\Programs\Microsoft VS Code\bin
-```
 ## using `cl` to compile the project
 > Reference: [compile the code in vscode](https://code.visualstudio.com/docs/languages/cpp)
 1. Install the C/C++ plug-in in VSCode
@@ -95,7 +81,7 @@ gdb --version
 ```
 ### Open VSCode with command `code`
 1. Open `Developer Command Prompt for VS 2022`, use the command `cd {your project path}` to the place that you want to code, ex:
-(please remember to check if the username in the file path is correct!!)
+(please **remember to check** if the **username** in the file path is correct!!)
 ```
 cd C:\Users\RUI\Document\Coding\MyProject
 ```
@@ -105,10 +91,25 @@ code .
 ``` 
 ### `code .` not working
 * [Adding the environment path](#adding-environment-path), the default path should look like:
-(remember to change the username)
+
+(remember to **change the username**)
 ```
 C:\Users\RUI\AppData\Local\Programs\Microsoft VS Code\bin
 ```
 ### still can not compile
 * Install [**`Windows SDK`**](https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/)
 
+## Adding Environment `Path`
+1. Open **`Setting`** `設定` (or directly search the stuff in step ii)
+2. Search **`Edit environment variables for your account`** (the search bar should be at the upper left corner of the window you opened from step i) `編輯您的帳戶的環境變數` (直接找 `環境變數` 應該就能找到)
+3. Find and click on **`Path`** in `Users variable` `使用者環境變數`
+4. Click **`Edit`** `編輯(E)`, then click **`New`** `新增(N)`
+5. Type , press **`Enter`**, and  press every **`OK`**.
+   * MinGW (default): 
+```
+C:\msys64\ucrt64\bin
+```
+   * VSCode `code.` (example, please remember to **change the username**):
+```
+C:\Users\RUI\AppData\Local\Programs\Microsoft VS Code\bin
+```
