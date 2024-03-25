@@ -59,6 +59,7 @@ public:
     void inv();
     void abs();
     void svd(matrix &U, matrix &Sigma, matrix &V) const;
+    void designMatrix(matrix &PHI, const int M, const double s, const std::vector<double> &u);
     // show
     void printRow(int ri, int l);
     void printRow(int ri);

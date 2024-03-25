@@ -22,42 +22,35 @@ Execute (for different functions):
 
 using namespace std;
 
+// consider transpose before saving the file????
+
 int main()
 {
+    dataset hw1;
     LinearRegression model;
-    matrix _x, _wML, X;
-    int k = 3, K = 11, step = 1000;
+    matrix x3;
     double M, J;
-    string fn;
-    vector<double>u;
-    // x
-    _x.range(-3, 3, step); // this should contains about 99.7% of input range since the data for trainning had been normalized
-    // get
+    string fn, pre;
+
+    // load data
+    hw1.read("HW1.csv");
+    // x3
+    x3.slice(hw1.x, 0, hw1.x.row() , 2, 3);
+    x3.save("homework/x3.csv");
+    model.prep(hw1, 10000);
+
+    // predict
     for (int m = 5; m <= 30; m += 5)
     {
         M = (double)m;
         model.setting(m);
         model.load(m);
-        u = model.u;
-        // _wML^T
-        _wML.resize(1, m);
-        for (int j = 0; j < m; j++)
-        {
-            _wML[0][j] = model.wML[K * j + k - 1][0];
-        }
-        // phi(x)^T
-        X.resize(m, step);
-        for (int j = 0; j < m; j++)
-        {
-            for (int i = 0; i < step; i++)
-            {
-                X[j][i] = model.basisFunction((double)_x[0][i], k, j, m, 0.1, u[j]);
-            }
-        }
-        // dot
-        _wML.dot(X);
-        fn = "homework/1_M" + to_string(m) + ".csv";
-        _wML.save(fn);
+        model.eval();
+        pre = "homework/Q1/" + model.name;
+        model.train.y.save(pre + "_train_y.csv");
+        model.train.y_predict.save(pre + "_train_y_predicted.csv");
+        model.valid.y.save(pre + "_valid_y.csv");
+        model.valid.y_predict.save(pre + "_valid_y_predicted.csv");
     }
     return 0;
 }

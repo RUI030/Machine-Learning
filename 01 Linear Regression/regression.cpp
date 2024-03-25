@@ -26,8 +26,12 @@ void LinearRegression::prep(dataset &ds, int i)
     train.update();
     mean = train.x.Mean;
     sd = train.x.STD;
+    mean_y = train.y.Mean;
+    sd_y = train.y.STD;
     valid.x.normalize(mean, sd);
     train.x.normalize();
+    // valid.y.normalize(mean_y, sd_y);
+    // train.y.normalize();
     std::cout << "\033[1;32mSuccessfully preprocessed the data!\033[0m" << std::endl;
 }
 void LinearRegression::prep(dataset &ds)
@@ -114,6 +118,59 @@ void LinearRegression::update(const matrix &X, const matrix &t)
 
     std::cout << "\033[1;32mSuccessfully updated wML!\033[0m" << std::endl;
 }
+void LinearRegression::update(const dataset &ds)
+{
+    update(ds.x, ds.y);
+}
+void LinearRegression::update()
+{
+    update(train);
+}
+void LinearRegression::update2(matrix &X, const matrix &t)
+{
+    int N = X.row(); // Number of rows of data
+    int K = X.col(); // Number of features
+
+    // Calculate design matrix
+    PHI.resize(N, K * M);
+    for (int i = 0; i < N; i++)
+    {
+        for (int k = 0; k < K; k++)
+        {
+            PHI[i][k * M] = 1; // phi(x) = 1 for j = 0 (redundant term for convenience)
+            for (int j = 1; j < M; j++)
+            {
+                PHI[i][k * M + j] = 1 / (1 + exp(-(X[i][k] - u[j]) / s)); // basis function
+            }
+        }
+    }
+
+    // Ridge regression using SVD
+    matrix U, Sigma, V;
+    PHI.svd(U, Sigma, V);
+
+    // Calculate the pseudo-inverse of Sigma with ridge regularization
+    matrix Sigma_inv(Sigma.col(), Sigma.row());
+    for (int i = 0; i < min(Sigma.row(), Sigma.col()); i++)
+    {
+        Sigma_inv[i][i] = Sigma[i][i] / (Sigma[i][i] * Sigma[i][i] + lambda);
+    }
+
+    // Calculate wML = V * Sigma_inv * U^T * t
+    U.T();
+    U.dot(t);
+    wML = V * Sigma_inv * U;
+
+    std::cout << "\033[1;32mSuccessfully updated wML with ridge regression!\033[0m" << std::endl;
+}
+void LinearRegression::update2(dataset &ds)
+{
+    update2(ds.x, ds.y);
+}
+void LinearRegression::update2()
+{
+    update2(train);
+}
 double LinearRegression::basisFunction(double val, int k, int j, int m, double S, double uj)
 {
     return (j) ? (1.0 / (1.0 + exp(-(val - uj) / s))) : 1;
@@ -125,14 +182,6 @@ double LinearRegression::basisFunction(double val, int k, int j, int m)
 double LinearRegression::basisFunction(double val, int k, int j)
 {
     return basisFunction(val, k, j, M, s, u[j]);
-}
-void LinearRegression::update(const dataset &ds)
-{
-    update(ds.x, ds.y);
-}
-void LinearRegression::update()
-{
-    update(train);
 }
 void LinearRegression::predict(dataset &ds)
 {
@@ -170,10 +219,10 @@ void LinearRegression::eval(dataset &ds, bool doNorm)
             a = ds.y[i][j];
             b = ds.y_predict[i][j];
             ttmp = a ? abs((a - b) / a) : abs(a - b);
-            ttmp1 = pow((a-b),2);
+            ttmp1 = pow((a - b), 2);
             // tmp += (ttmp > 1.0) ? 1.0 : ttmp;
             tmp += ttmp;
-            tmp1 +=ttmp1;
+            tmp1 += ttmp1;
             // print large error
             // if (ttmp > 1.0)
             //     cout << a << "\t" << b << "\t" << ttmp << endl;
@@ -220,10 +269,11 @@ void LinearRegression::normalize(dataset &input)
 {
     normalize(input.x);
 }
-void LinearRegression::setting(const int _m, const double _s)
+void LinearRegression::setting(const int _m, const double _s, const double l)
 {
     M = (double)_m;
     s = _s;
+    lambda = l;
     name = "RegressionModel_M" + to_string(_m);
     u.clear();
     u.push_back(0.0); // reduncdant term for convenience
@@ -232,16 +282,21 @@ void LinearRegression::setting(const int _m, const double _s)
         u.push_back((3.0 * (-M + 1 + 2 * (j - 1) * (M - 1) / (M - 2))) / M);
     }
 }
+void LinearRegression::setting(const int _m, const double _s)
+{
+    setting(_m, 0.1, 0.1);
+}
 void LinearRegression::setting(const int _m)
 {
-    setting(_m, 0.1);
+    setting(_m, 0.1, 0.1);
 }
 void LinearRegression::rename(const std::string &modelName)
 {
-    name = modelName;
+    this->name = modelName + "_M" + to_string((int)M);
 }
 void LinearRegression::load(const std::string &modelName, const std::string &pre)
 {
+    std::string tmpName = modelName;
     std::string _wML = pre + modelName + ".csv";
     std::string _set = pre + modelName + "_setting.csv";
     std::string _mean = pre + modelName + "_mean.csv";
@@ -253,7 +308,9 @@ void LinearRegression::load(const std::string &modelName, const std::string &pre
     tmp.read(_set);
     M = tmp[0][0];
     s = tmp[0][1];
+    lambda = tmp[0][2];
     setting(M, s);
+    name = tmpName;
     // mean ans std
     matrix MEAN, SD;
     MEAN.read(_mean);
@@ -267,8 +324,7 @@ void LinearRegression::load(const std::string &modelName)
 }
 void LinearRegression::load(const int _m)
 {
-    string mn = "RegressionModel_M" + to_string(_m);
-    load(mn, "model/");
+    load(this->name, "model/");
 }
 void LinearRegression::save(const std::string &modelName, const std::string &pre)
 {
@@ -276,9 +332,10 @@ void LinearRegression::save(const std::string &modelName, const std::string &pre
     std::string _set = pre + modelName + "_setting.csv";
     std::string _mean = pre + modelName + "_mean.csv";
     std::string _sd = pre + modelName + "_sd.csv";
-    matrix tmp(1, 2);
+    matrix tmp(1, 3);
     tmp[0][0] = M;
     tmp[0][1] = s;
+    tmp[0][2] = lambda;
     matrix MEAN, SD;
     MEAN.append(mean);
     SD.append(sd);

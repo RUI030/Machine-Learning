@@ -10,7 +10,7 @@
                 "/nologo",
                 "/source-charset:utf-8",
                 "/Fe${fileDirname}\\${fileBasenameNoExtension}.exe",
-                "1_fit.cpp",
+                "z_1_2_fit_GPT.cpp",
                 "matrix.cpp",
                 "dataset.cpp",
                 "regression.cpp",

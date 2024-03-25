@@ -10,9 +10,6 @@
 
 using namespace std;
 
-// Eigen tutorial
-// https://www.youtube.com/watch?v=fUxp3upZsk0&ab_channel=AleksandarHaber
-
 matrix::matrix(int rows, int cols)
 {
     resize(rows, cols);
@@ -328,24 +325,24 @@ void matrix::slice(const matrix &source, int r1, int r2, int c1, int c2)
         swap(r1, r2);
     if (c1 > c2)
         swap(c1, c2);
-    if (r1 < 0 || c1 < 0 || r2 >= source.row() || c2 >= source.col())
+    if (r1 < 0 || c1 < 0 || r2 > source.row() || c2 > source.col())
     {
         cout << "\033[1;31m[FAIL]: Index out of bounds.\033[0m" << endl;
         return;
     }
     this->clear();
-    r = r2 - r1 + 1;
-    c = c2 - c1 + 1;
+    r = r2 - r1 ;
+    c = c2 - c1 ;
     data.reserve(r);
-    for (int i = r1; i <= r2; i++)
+    for (int i = r1; i < r2; i++)
     {
-        vector<double> newRow(source.data[i].begin() + c1, source.data[i].begin() + c2 + 1);
+        vector<double> newRow(source.data[i].begin() + c1, source.data[i].begin() + c2 );
         this->data.emplace_back(newRow);
     }
 }
 void matrix::slice(const matrix &source, int r1, int r2)
 {
-    slice(source, r1, r2, 0, source.col() - 1);
+    slice(source, r1, r2, 0, source.col());
 }
 void matrix::fill(double val)
 {
@@ -580,6 +577,25 @@ void matrix::svd(matrix &U, matrix &Sigma, matrix &V) const
         }
     }
 }
+void matrix::designMatrix(matrix &PHI, const int M, const double s, const std::vector<double> &u)
+{
+    int N = row(); // number of row of data
+    int K = col(); // number of features
+    // resize design matrix
+    PHI.resize(N, K * M);
+    // calculate design matrix
+    for (int i = 0; i < N; i++) // number of rows
+    {
+        for (int k = 0; k < K; k++) // concatenate the design matrix of different feature
+        {
+            PHI[i][k * M] = 1; // phi(x) = 1 while j = 0 ==> redundant item for convenience
+            for (int j = 1; j < M; j++)
+            {
+                PHI[i][k * M + j] = 1 / (1 + exp(-(data[i][k] - u[j]) / s)); // note the negative sign in the exponent
+            }
+        }
+    }
+}
 void matrix::printRow(int ri, int l)
 {
     if (ri < 0 || ri >= r)
@@ -706,4 +722,6 @@ void matrix::save(const std::string &filename) const
     file.close();
 }
 // reshape: preserve the element while resizing
-// arange:
+
+// Eigen tutorial
+// https://www.youtube.com/watch?v=fUxp3upZsk0&ab_channel=AleksandarHaber

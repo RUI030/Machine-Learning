@@ -99,7 +99,7 @@ void dataset::print()
 }
 void dataset::copy(const dataset &source, int r1, int r2)
 {
-    n = r2 - r1 + 1;
+    n = r2 - r1;
     k = source.k;
     xdim = source.xdim;
     ydim = source.ydim;
@@ -108,7 +108,7 @@ void dataset::copy(const dataset &source, int r1, int r2)
 }
 void dataset::copy(const dataset &source)
 {
-    copy(source, 0, source.n - 1);
+    copy(source, 0, source.n);
 }
 void dataset::split(dataset &train, dataset &valid, int idx)
 {
@@ -117,8 +117,8 @@ void dataset::split(dataset &train, dataset &valid, int idx)
         std::cerr << "Invalid split index: " << idx << std::endl;
         return;
     }
-    train.copy(*this, 0, idx - 1);
-    valid.copy(*this, idx, n - 1);
+    train.copy(*this, 0, idx);
+    valid.copy(*this, idx, n);
     train.update();
     valid.update();
 }
@@ -147,7 +147,6 @@ void dataset::normalize()
     x.normalize();
     y.normalize();
 }
-
 void dataset::designMatrix(const int M, const double s, const std::vector<double> &u)
 {
     int N = x.row(); // number of row of data

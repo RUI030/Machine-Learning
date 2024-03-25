@@ -40,7 +40,7 @@ int main()
         // todo: save evaluated result:
         // hmmm... need to change regression.h and .cpp
     }
-    mse.save("homework/2_1.csv");
-    acc.save("homework/2_2.csv");
+    mse.save("homework/Q2/2_1_MSE.csv");
+    acc.save("homework/Q2/2_2_ACC.csv");
     return 0;
 }

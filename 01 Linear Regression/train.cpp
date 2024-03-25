@@ -22,13 +22,12 @@ using namespace std;
 
 int main()
 {
-    int M = 5;
+    int M = 10;
     dataset song, train, valid;
     LinearRegression model(M);
     song.read("HW1.csv"); // load data
     model.prep(song,10000);
     model.update();
     model.eval();
-    model.save();
     return 0;
 }
