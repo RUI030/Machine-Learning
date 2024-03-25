@@ -183,8 +183,10 @@ double LinearRegression::basisFunction(double val, int k, int j)
 {
     return basisFunction(val, k, j, M, s, u[j]);
 }
-void LinearRegression::predict(dataset &ds)
+void LinearRegression::predict(dataset &ds, bool doNorm)
 {
+    if (doNorm)
+        normalize(ds);
     // std::cout << "...predicting..." << std::endl;
     // only update y_predict
     ds.designMatrix(M, s, u);
@@ -193,11 +195,14 @@ void LinearRegression::predict(dataset &ds)
     // std::cout << "y_predicted: " << ds.y_predict.dim() << std::endl;
     // std::cout << "\033[1;32mSuccessfully predicted the output!\033[0m" << std::endl;
 }
+void LinearRegression::predict(dataset &ds)
+{
+    predict(ds, 1);
+}
 void LinearRegression::eval(dataset &ds, bool doNorm)
 {
-    if (doNorm)
-        normalize(ds);
-    predict(ds);
+
+    predict(ds, doNorm);
     // std::cout << "...evaluating..." << std::endl;
     int Nd = ds.y.row();
     int K = ds.y.col();

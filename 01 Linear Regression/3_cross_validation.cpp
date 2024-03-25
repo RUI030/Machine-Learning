@@ -27,8 +27,8 @@ int main()
     LinearRegression model;
     hw1.read("HW1.csv"); // load data
     // split into K subset
-    int cut[6]; // index to split the subset
-    int n = hw1.n;
+    int cut[6];    // index to split the subset
+    int n = 10000; // first 1000 for training and cross validation
     cut[0] = 0;
     cut[5] = n;
     for (int c = 1; c <= k; c++)
@@ -48,6 +48,11 @@ int main()
             model.setting(m);
             model.update();
         }
+        // record Loss Function, which could calculate from MSE since the given error function = 1/2 SUM((y-t)^2) = Nd/2 * MSE
     }
+    // save every Loss 
+    // Choose best Model
+    // Train & save model
+    
     return 0;
 }

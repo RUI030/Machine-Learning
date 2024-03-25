@@ -22,6 +22,7 @@ public:
     void update2(matrix &X, const matrix &t);
     void update2(dataset &ds);
     void update2();
+    void predict(dataset &ds, bool doNorm);
     void predict(dataset &ds);
     void eval(dataset &ds, bool doNorm); // if valid.y_predict is empty, predict first
     void eval(dataset &ds);              // if valid.y_predict is empty, predict first
