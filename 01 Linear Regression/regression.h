@@ -11,13 +11,14 @@ public:
     LinearRegression(int m);
     LinearRegression();
     ~LinearRegression();
-    void prep(dataset &ds, int i);
-    void prep(dataset &ds);
+    void split(dataset &ds, int i);
+    void split(dataset &ds);
+    void prep();
     double basisFunction(double val, int k, int j, int m, double S, double uj);
     double basisFunction(double val, int k, int j, int m);
     double basisFunction(double val, int k, int j);
-    void update(const matrix &X, const matrix &t);
-    void update(const dataset &ds);
+    void update(matrix &X, const matrix &t);
+    void update(dataset &ds);
     void update();
     void update2(matrix &X, const matrix &t);
     void update2(dataset &ds);

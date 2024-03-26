@@ -37,7 +37,8 @@ int main()
     // x3
     x3.slice(hw1.x, 0, hw1.x.row() , 2, 3);
     x3.save("homework/x3.csv");
-    model.prep(hw1, 10000);
+    model.split(hw1, 10000);
+    model.prep();
 
     // predict
     for (int m = 5; m <= 30; m += 5)

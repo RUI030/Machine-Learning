@@ -26,6 +26,7 @@ public:
     void normalize();
     void designMatrix(const int M, const double s, const std::vector<double> &u);
     void save(const std::string& filename); 
+    void clear();
     // data
     matrix x,y,y_predict;
     // basis function

@@ -170,3 +170,16 @@ void dataset::save(const std::string &filename)
 {
     // todo
 }
+void dataset::clear()
+{
+    x.clear();
+    y.clear();
+    y_predict.clear();
+    PHI.clear();
+    k=0;
+    xdim=0;
+    ydim=0;
+    n=0;
+    accuracy.clear();
+    MSE.clear();
+}

@@ -26,7 +26,8 @@ int main()
     dataset song;
     LinearRegression model;
     song.read("HW1.csv"); // load data
-    model.prep(song, 10000);
+    model.split(song, 10000);
+    model.prep();
     matrix mse(0, 0), acc(0, 0) ;
     for (int m = 5; m <= 30; m += 5)
     {

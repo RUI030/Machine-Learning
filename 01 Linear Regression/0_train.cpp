@@ -25,7 +25,8 @@ int main()
     dataset song, train, valid;
     LinearRegression model;
     song.read("HW1.csv"); // load data
-    model.prep(song, 10000);
+    model.split(song, 10000);
+    model.prep();
     for (int m = 5; m <= 30; m += 5)
     {
         model.setting(m);

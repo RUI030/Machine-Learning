@@ -17,11 +17,18 @@ LinearRegression::~LinearRegression()
 {
     u.clear();
 }
-void LinearRegression::prep(dataset &ds, int i)
+void LinearRegression::split(dataset &ds, int i)
 {
     if (i > ds.n)
-        cout << "\033[1;31m< Model Preprocessing >[FAIL]: Index out of bounds.\033[0m" << endl;
+        cout << "\033[1;31m< Model Split Data > [FAIL]: Index out of bounds.\033[0m" << endl;
     ds.split(train, valid, i);
+}
+void LinearRegression::split(dataset &ds)
+{
+    split(ds, (int)(ds.n * 0.8));
+}
+void LinearRegression::prep()
+{
     // save the parameters for normalization
     train.update();
     mean = train.x.Mean;
@@ -32,74 +39,13 @@ void LinearRegression::prep(dataset &ds, int i)
     train.x.normalize();
     // valid.y.normalize(mean_y, sd_y);
     // train.y.normalize();
-    std::cout << "\033[1;32mSuccessfully preprocessed the data!\033[0m" << std::endl;
+    // std::cout << "\033[1;32mSuccessfully preprocessed the data!\033[0m" << std::endl;
 }
-void LinearRegression::prep(dataset &ds)
-{
-    prep(ds, (int)(ds.n * 0.8));
-}
-// void LinearRegression::update(const matrix &X, const matrix &t)
-// {
-//     int N = X.row(); // number of rows of data
-//     int K = X.col(); // number of features
-//     // resize design matrix
-//     PHI.resize(N, K * M);
-//     // calculate design matrix
-//     for (int i = 0; i < N; i++) // number of rows
-//     {
-//         for (int k = 0; k < K; k++) // concatenate the design matrix of different feature
-//         {
-//             PHI[i][k * M] = 1; // phi(x) = 1 while j = 0 ==> redundant item for convenience
-//             for (int j = 1; j < M; j++)
-//             {
-//                 PHI[i][k * M + j] = 1 / (1 + exp((X[i][k] - u[j]) / s));
-//             }
-//         }
-//     }
-//     // calculate wML using SVD
-//     matrix U, Sigma, V;
-//     PHI.svd(U, Sigma, V);
-//     // Calculate the pseudo-inverse of Sigma
-//     matrix Sigma_inv(Sigma.col(), Sigma.row());
-//     for (int i = 0; i < min(Sigma.row(), Sigma.col()); i++)
-//     {
-//         if (Sigma[i][i] > 1e-6) // threshold for singular values
-//         {
-//             Sigma_inv[i][i] = 1.0 / Sigma[i][i];
-//         }
-//         else
-//         {
-//             Sigma_inv[i][i] = 0.0;
-//         }
-//     }
-//     // Calculate wML = V * Sigma_inv * U^T * t
-//     wML = V * Sigma_inv;
-//     U.T();
-//     wML.dot(U);
-//     wML.dot(t);
-//     std::cout << "\033[1;32mSuccessfully updated wML!\033[0m" << std::endl;
-// }
-void LinearRegression::update(const matrix &X, const matrix &t)
+void LinearRegression::update(matrix &X, const matrix &t)
 {
     int N = X.row(); // Number of rows of data
     int K = X.col(); // Number of features
-
-    // Resize design matrix
-    PHI.resize(N, K * M);
-
-    // Calculate design matrix
-    for (int i = 0; i < N; i++)
-    {
-        for (int k = 0; k < K; k++)
-        {
-            PHI[i][k * M] = 1; // phi(x) = 1 for j = 0 (redundant term for convenience)
-            for (int j = 1; j < M; j++)
-            {
-                PHI[i][k * M + j] = 1 / (1 + exp(-(X[i][k] - u[j]) / s)); // note the negative sign in the exponent
-            }
-        }
-    }
-
+    X.designMatrix(PHI, M, s, u);
     // Calculate wML using SVD
     matrix U, Sigma, V;
     PHI.svd(U, Sigma, V);
@@ -116,9 +62,9 @@ void LinearRegression::update(const matrix &X, const matrix &t)
     U.dot(t);
     wML = V * Sigma_inv * U;
 
-    std::cout << "\033[1;32mSuccessfully updated wML!\033[0m" << std::endl;
+    // std::cout << "\033[1;32mSuccessfully updated wML!\033[0m" << std::endl;
 }
-void LinearRegression::update(const dataset &ds)
+void LinearRegression::update(dataset &ds)
 {
     update(ds.x, ds.y);
 }
@@ -130,21 +76,7 @@ void LinearRegression::update2(matrix &X, const matrix &t)
 {
     int N = X.row(); // Number of rows of data
     int K = X.col(); // Number of features
-
-    // Calculate design matrix
-    PHI.resize(N, K * M);
-    for (int i = 0; i < N; i++)
-    {
-        for (int k = 0; k < K; k++)
-        {
-            PHI[i][k * M] = 1; // phi(x) = 1 for j = 0 (redundant term for convenience)
-            for (int j = 1; j < M; j++)
-            {
-                PHI[i][k * M + j] = 1 / (1 + exp(-(X[i][k] - u[j]) / s)); // basis function
-            }
-        }
-    }
-
+    X.designMatrix(PHI, M, s, u);
     // Ridge regression using SVD
     matrix U, Sigma, V;
     PHI.svd(U, Sigma, V);
@@ -260,11 +192,13 @@ void LinearRegression::eval(dataset &ds)
 void LinearRegression::eval()
 {
     // cout << "\n\033[36m>>>>>>>>>>>>>>>>>>> Train >>>>>>>>>>>>>>>>>>>\033[0m\n";
-    cout << "\n\033[36m>>> Train >>> \033[0m";
+    cout << "\033[36m>>> Train >>> \033[0m";
     eval(train, 0);
+    cout << endl;
     // cout << "\n\033[35m<<<<<<<<<<<<<<<<<<< Valid <<<<<<<<<<<<<<<<<<<\033[0m\n";
-    cout << "\n\033[35m<<< Valid <<< \033[0m";
+    cout << "\033[35m<<< Valid <<< \033[0m";
     eval(valid, 0);
+    cout << endl;
 }
 void LinearRegression::normalize(matrix &input)
 {

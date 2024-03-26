@@ -1,0 +1,293 @@
+ ============== M = 3 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M3        [ACC]:   -0.855082      [MSE]:     464.052
+<<< Valid <<< RegressionModel_M3        [ACC]:    0.328918      [MSE]:     386.782
+[FOLD]:2
+>>> Train >>> RegressionModel_M3        [ACC]:   -0.731584      [MSE]:     449.797
+<<< Valid <<< RegressionModel_M3        [ACC]:   -0.450962      [MSE]:     432.359
+[FOLD]:3
+>>> Train >>> RegressionModel_M3        [ACC]:   -0.758107      [MSE]:     458.908
+<<< Valid <<< RegressionModel_M3        [ACC]:   -0.297162      [MSE]:     403.446
+[FOLD]:4
+>>> Train >>> RegressionModel_M3        [ACC]:   -0.567093      [MSE]:     430.625
+<<< Valid <<< RegressionModel_M3        [ACC]:    -1.06694      [MSE]:     516.346
+[FOLD]:5
+>>> Train >>> RegressionModel_M3        [ACC]:   -0.356317      [MSE]:     416.841
+<<< Valid <<< RegressionModel_M3        [ACC]:    -1.94061      [MSE]:     566.343
+ ============== M = 4 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M4        [ACC]:   -0.856374      [MSE]:     449.741
+<<< Valid <<< RegressionModel_M4        [ACC]:     0.32213      [MSE]:     397.904
+[FOLD]:2
+>>> Train >>> RegressionModel_M4        [ACC]:   -0.729931      [MSE]:     440.071
+<<< Valid <<< RegressionModel_M4        [ACC]:   -0.422042      [MSE]:     422.382
+[FOLD]:3
+>>> Train >>> RegressionModel_M4        [ACC]:   -0.761588      [MSE]:     453.005
+<<< Valid <<< RegressionModel_M4        [ACC]:   -0.275607      [MSE]:     383.081
+[FOLD]:4
+>>> Train >>> RegressionModel_M4        [ACC]:   -0.570351      [MSE]:     419.932
+<<< Valid <<< RegressionModel_M4        [ACC]:    -1.09629      [MSE]:     510.081
+[FOLD]:5
+>>> Train >>> RegressionModel_M4        [ACC]:   -0.342891      [MSE]:     402.849
+<<< Valid <<< RegressionModel_M4        [ACC]:    -2.02598      [MSE]:     574.063
+ ============== M = 5 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M5        [ACC]:   -0.839796      [MSE]:     443.785
+<<< Valid <<< RegressionModel_M5        [ACC]:    0.327806      [MSE]:     396.981
+[FOLD]:2
+>>> Train >>> RegressionModel_M5        [ACC]:   -0.718472      [MSE]:      434.34
+<<< Valid <<< RegressionModel_M5        [ACC]:   -0.415397      [MSE]:     423.436
+[FOLD]:3
+>>> Train >>> RegressionModel_M5        [ACC]:    -0.74529      [MSE]:     448.202
+<<< Valid <<< RegressionModel_M5        [ACC]:   -0.290036      [MSE]:     387.355
+[FOLD]:4
+>>> Train >>> RegressionModel_M5        [ACC]:   -0.562183      [MSE]:     416.601
+<<< Valid <<< RegressionModel_M5        [ACC]:    -1.09393      [MSE]:     500.695
+[FOLD]:5
+>>> Train >>> RegressionModel_M5        [ACC]:   -0.333422      [MSE]:      396.17
+<<< Valid <<< RegressionModel_M5        [ACC]:     -2.0078      [MSE]:     574.184
+ ============== M = 6 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M6        [ACC]:   -0.831307      [MSE]:     441.838
+<<< Valid <<< RegressionModel_M6        [ACC]:    0.322811      [MSE]:     404.794
+[FOLD]:2
+>>> Train >>> RegressionModel_M6        [ACC]:   -0.711358      [MSE]:     433.791
+<<< Valid <<< RegressionModel_M6        [ACC]:   -0.415452      [MSE]:     423.703
+[FOLD]:3
+>>> Train >>> RegressionModel_M6        [ACC]:   -0.742547      [MSE]:     446.991
+<<< Valid <<< RegressionModel_M6        [ACC]:   -0.284692      [MSE]:     391.327
+[FOLD]:4
+>>> Train >>> RegressionModel_M6        [ACC]:   -0.560286      [MSE]:     416.258
+<<< Valid <<< RegressionModel_M6        [ACC]:    -1.09368      [MSE]:     502.158
+[FOLD]:5
+>>> Train >>> RegressionModel_M6        [ACC]:   -0.330633      [MSE]:     396.951
+<<< Valid <<< RegressionModel_M6        [ACC]:    -2.00315      [MSE]:     571.747
+ ============== M = 7 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M7        [ACC]:   -0.818822      [MSE]:     436.525
+<<< Valid <<< RegressionModel_M7        [ACC]:    0.327492      [MSE]:     404.718
+[FOLD]:2
+>>> Train >>> RegressionModel_M7        [ACC]:   -0.698791      [MSE]:     429.073
+<<< Valid <<< RegressionModel_M7        [ACC]:   -0.413525      [MSE]:     442.715
+[FOLD]:3
+>>> Train >>> RegressionModel_M7        [ACC]:   -0.732659      [MSE]:     444.111
+<<< Valid <<< RegressionModel_M7        [ACC]:   -0.286407      [MSE]:     391.633
+[FOLD]:4
+>>> Train >>> RegressionModel_M7        [ACC]:   -0.552469      [MSE]:     412.289
+<<< Valid <<< RegressionModel_M7        [ACC]:    -1.07407      [MSE]:     496.688
+[FOLD]:5
+>>> Train >>> RegressionModel_M7        [ACC]:   -0.316472      [MSE]:     391.343
+<<< Valid <<< RegressionModel_M7        [ACC]:    -2.00537      [MSE]:     572.539
+ ============== M = 8 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M8        [ACC]:   -0.821558      [MSE]:     437.901
+<<< Valid <<< RegressionModel_M8        [ACC]:    0.322897      [MSE]:     405.019
+[FOLD]:2
+>>> Train >>> RegressionModel_M8        [ACC]:   -0.702212      [MSE]:     430.135
+<<< Valid <<< RegressionModel_M8        [ACC]:   -0.415404      [MSE]:     592.166
+[FOLD]:3
+>>> Train >>> RegressionModel_M8        [ACC]:   -0.735675      [MSE]:     444.437
+<<< Valid <<< RegressionModel_M8        [ACC]:    -0.28743      [MSE]:     394.821
+[FOLD]:4
+>>> Train >>> RegressionModel_M8        [ACC]:   -0.552909      [MSE]:     413.185
+<<< Valid <<< RegressionModel_M8        [ACC]:    -1.13258      [MSE]:     505.409
+[FOLD]:5
+>>> Train >>> RegressionModel_M8        [ACC]:   -0.323386      [MSE]:      392.39
+<<< Valid <<< RegressionModel_M8        [ACC]:    -2.00136      [MSE]:     574.002
+ ============== M = 9 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M9        [ACC]:   -0.817418      [MSE]:     436.046
+<<< Valid <<< RegressionModel_M9        [ACC]:    0.329733      [MSE]:      406.87
+[FOLD]:2
+>>> Train >>> RegressionModel_M9        [ACC]:   -0.698066      [MSE]:     428.689
+<<< Valid <<< RegressionModel_M9        [ACC]:   -0.417038      [MSE]:      705.68
+[FOLD]:3
+>>> Train >>> RegressionModel_M9        [ACC]:   -0.734228      [MSE]:     442.743
+<<< Valid <<< RegressionModel_M9        [ACC]:   -0.282823      [MSE]:     394.594
+[FOLD]:4
+>>> Train >>> RegressionModel_M9        [ACC]:   -0.548037      [MSE]:      411.03
+<<< Valid <<< RegressionModel_M9        [ACC]:    -1.18678      [MSE]:     526.992
+[FOLD]:5
+>>> Train >>> RegressionModel_M9        [ACC]:   -0.316794      [MSE]:     391.046
+<<< Valid <<< RegressionModel_M9        [ACC]:    -2.01292      [MSE]:      572.38
+ ============== M = 10 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M10       [ACC]:   -0.817106      [MSE]:     435.076
+<<< Valid <<< RegressionModel_M10       [ACC]:    0.323564      [MSE]:     409.297
+[FOLD]:2
+>>> Train >>> RegressionModel_M10       [ACC]:   -0.701609      [MSE]:     428.423
+<<< Valid <<< RegressionModel_M10       [ACC]:   -0.422336      [MSE]:     966.335
+[FOLD]:3
+>>> Train >>> RegressionModel_M10       [ACC]:   -0.734533      [MSE]:      442.62
+<<< Valid <<< RegressionModel_M10       [ACC]:    -0.29421      [MSE]:     398.317
+[FOLD]:4
+>>> Train >>> RegressionModel_M10       [ACC]:    -0.54923      [MSE]:     410.732
+<<< Valid <<< RegressionModel_M10       [ACC]:    -1.23682      [MSE]:     545.454
+[FOLD]:5
+>>> Train >>> RegressionModel_M10       [ACC]:   -0.321551      [MSE]:     390.474
+<<< Valid <<< RegressionModel_M10       [ACC]:    -2.00893      [MSE]:     573.362
+ ============== M = 11 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M11       [ACC]:   -0.807622      [MSE]:     433.324
+<<< Valid <<< RegressionModel_M11       [ACC]:     0.32517      [MSE]:     412.265
+[FOLD]:2
+>>> Train >>> RegressionModel_M11       [ACC]:   -0.689874      [MSE]:     426.621
+<<< Valid <<< RegressionModel_M11       [ACC]:   -0.409899      [MSE]:     420.795
+[FOLD]:3
+>>> Train >>> RegressionModel_M11       [ACC]:   -0.727855      [MSE]:     441.719
+<<< Valid <<< RegressionModel_M11       [ACC]:   -0.282002      [MSE]:     390.815
+[FOLD]:4
+>>> Train >>> RegressionModel_M11       [ACC]:   -0.545371      [MSE]:     410.355
+<<< Valid <<< RegressionModel_M11       [ACC]:    -1.39824      [MSE]:     703.927
+[FOLD]:5
+>>> Train >>> RegressionModel_M11       [ACC]:   -0.313337      [MSE]:     389.911
+<<< Valid <<< RegressionModel_M11       [ACC]:    -2.00975      [MSE]:     574.133
+ ============== M = 12 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M12       [ACC]:   -0.806594      [MSE]:     432.274
+<<< Valid <<< RegressionModel_M12       [ACC]:    0.321073      [MSE]:     409.785
+[FOLD]:2
+>>> Train >>> RegressionModel_M12       [ACC]:   -0.688715      [MSE]:     425.517
+<<< Valid <<< RegressionModel_M12       [ACC]:   -0.415018      [MSE]:     422.782
+[FOLD]:3
+>>> Train >>> RegressionModel_M12       [ACC]:   -0.720439      [MSE]:     440.302
+<<< Valid <<< RegressionModel_M12       [ACC]:    -0.29015      [MSE]:     397.041
+[FOLD]:4
+>>> Train >>> RegressionModel_M12       [ACC]:   -0.543811      [MSE]:     408.961
+<<< Valid <<< RegressionModel_M12       [ACC]:    -1.35611      [MSE]:      655.81
+[FOLD]:5
+>>> Train >>> RegressionModel_M12       [ACC]:   -0.313857      [MSE]:     388.032
+<<< Valid <<< RegressionModel_M12       [ACC]:    -2.00001      [MSE]:     573.424
+ ============== M = 13 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M13       [ACC]:   -0.806996      [MSE]:      431.67
+<<< Valid <<< RegressionModel_M13       [ACC]:    0.324775      [MSE]:     411.322
+[FOLD]:2
+>>> Train >>> RegressionModel_M13       [ACC]:   -0.688855      [MSE]:     424.253
+<<< Valid <<< RegressionModel_M13       [ACC]:   -0.412635      [MSE]:     434.112
+[FOLD]:3
+>>> Train >>> RegressionModel_M13       [ACC]:    -0.72192      [MSE]:     438.926
+<<< Valid <<< RegressionModel_M13       [ACC]:   -0.295273      [MSE]:     399.449
+[FOLD]:4
+>>> Train >>> RegressionModel_M13       [ACC]:   -0.544165      [MSE]:     408.642
+<<< Valid <<< RegressionModel_M13       [ACC]:    -1.24993      [MSE]:     562.882
+[FOLD]:5
+>>> Train >>> RegressionModel_M13       [ACC]:    -0.31296      [MSE]:      387.43
+<<< Valid <<< RegressionModel_M13       [ACC]:    -2.00917      [MSE]:     575.014
+ ============== M = 14 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M14       [ACC]:   -0.805245      [MSE]:     430.751
+<<< Valid <<< RegressionModel_M14       [ACC]:    0.321324      [MSE]:     411.575
+[FOLD]:2
+>>> Train >>> RegressionModel_M14       [ACC]:   -0.684936      [MSE]:     423.685
+<<< Valid <<< RegressionModel_M14       [ACC]:    -0.42417      [MSE]:     461.419
+[FOLD]:3
+>>> Train >>> RegressionModel_M14       [ACC]:   -0.719437      [MSE]:     439.282
+<<< Valid <<< RegressionModel_M14       [ACC]:   -0.290669      [MSE]:     398.308
+[FOLD]:4
+>>> Train >>> RegressionModel_M14       [ACC]:   -0.538475      [MSE]:     407.539
+<<< Valid <<< RegressionModel_M14       [ACC]:    -1.19665      [MSE]:      522.11
+[FOLD]:5
+>>> Train >>> RegressionModel_M14       [ACC]:   -0.312532      [MSE]:     386.416
+<<< Valid <<< RegressionModel_M14       [ACC]:     -2.0025      [MSE]:     575.903
+ ============== M = 15 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M15       [ACC]:   -0.798286      [MSE]:     430.218
+<<< Valid <<< RegressionModel_M15       [ACC]:    0.323285      [MSE]:     412.717
+[FOLD]:2
+>>> Train >>> RegressionModel_M15       [ACC]:   -0.684369      [MSE]:     423.351
+<<< Valid <<< RegressionModel_M15       [ACC]:   -0.411203      [MSE]:     488.702
+[FOLD]:3
+>>> Train >>> RegressionModel_M15       [ACC]:   -0.714257      [MSE]:     437.449
+<<< Valid <<< RegressionModel_M15       [ACC]:   -0.286273      [MSE]:     397.418
+[FOLD]:4
+>>> Train >>> RegressionModel_M15       [ACC]:   -0.538136      [MSE]:     407.096
+<<< Valid <<< RegressionModel_M15       [ACC]:    -1.78566      [MSE]:     1495.53
+[FOLD]:5
+>>> Train >>> RegressionModel_M15       [ACC]:   -0.309473      [MSE]:     386.717
+<<< Valid <<< RegressionModel_M15       [ACC]:    -2.00419      [MSE]:     574.412
+ ============== M = 16 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M16       [ACC]:   -0.797554      [MSE]:     428.327
+<<< Valid <<< RegressionModel_M16       [ACC]:    0.323548      [MSE]:     410.253
+[FOLD]:2
+>>> Train >>> RegressionModel_M16       [ACC]:   -0.673852      [MSE]:     420.089
+<<< Valid <<< RegressionModel_M16       [ACC]:   -0.430411      [MSE]:     491.265
+[FOLD]:3
+>>> Train >>> RegressionModel_M16       [ACC]:    -0.70876      [MSE]:     435.181
+<<< Valid <<< RegressionModel_M16       [ACC]:   -0.291085      [MSE]:      393.58
+[FOLD]:4
+>>> Train >>> RegressionModel_M16       [ACC]:    -0.53516      [MSE]:     406.186
+<<< Valid <<< RegressionModel_M16       [ACC]:    -1.68048      [MSE]:     1258.39
+[FOLD]:5
+>>> Train >>> RegressionModel_M16       [ACC]:   -0.305639      [MSE]:      383.93
+<<< Valid <<< RegressionModel_M16       [ACC]:    -1.99632      [MSE]:     574.038
+ ============== M = 17 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M17       [ACC]:   -0.794249      [MSE]:     428.645
+<<< Valid <<< RegressionModel_M17       [ACC]:     0.32072      [MSE]:     413.108
+[FOLD]:2
+>>> Train >>> RegressionModel_M17       [ACC]:   -0.676763      [MSE]:     421.205
+<<< Valid <<< RegressionModel_M17       [ACC]:   -0.428465      [MSE]:     699.686
+[FOLD]:3
+>>> Train >>> RegressionModel_M17       [ACC]:   -0.709521      [MSE]:     435.818
+<<< Valid <<< RegressionModel_M17       [ACC]:   -0.281348      [MSE]:     395.222
+[FOLD]:4
+>>> Train >>> RegressionModel_M17       [ACC]:   -0.533009      [MSE]:     405.569
+<<< Valid <<< RegressionModel_M17       [ACC]:    -1.32676      [MSE]:     610.749
+[FOLD]:5
+>>> Train >>> RegressionModel_M17       [ACC]:   -0.307581      [MSE]:     384.889
+<<< Valid <<< RegressionModel_M17       [ACC]:    -1.99365      [MSE]:     573.721
+ ============== M = 18 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M18       [ACC]:   -0.790434      [MSE]:     426.837
+<<< Valid <<< RegressionModel_M18       [ACC]:    0.321117      [MSE]:     411.687
+[FOLD]:2
+>>> Train >>> RegressionModel_M18       [ACC]:   -0.668995      [MSE]:     418.811
+<<< Valid <<< RegressionModel_M18       [ACC]:   -0.432286      [MSE]:     1873.04
+[FOLD]:3
+>>> Train >>> RegressionModel_M18       [ACC]:   -0.702523      [MSE]:     433.552
+<<< Valid <<< RegressionModel_M18       [ACC]:   -0.281134      [MSE]:     395.189
+[FOLD]:4
+>>> Train >>> RegressionModel_M18       [ACC]:   -0.531013      [MSE]:      404.42
+<<< Valid <<< RegressionModel_M18       [ACC]:    -2.86964      [MSE]:     7040.25
+[FOLD]:5
+>>> Train >>> RegressionModel_M18       [ACC]:   -0.301967      [MSE]:     383.028
+<<< Valid <<< RegressionModel_M18       [ACC]:    -1.99742      [MSE]:     574.582
+ ============== M = 19 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M19       [ACC]:   -0.788137      [MSE]:     425.754
+<<< Valid <<< RegressionModel_M19       [ACC]:    0.324302      [MSE]:     411.109
+[FOLD]:2
+>>> Train >>> RegressionModel_M19       [ACC]:   -0.665671      [MSE]:     417.634
+<<< Valid <<< RegressionModel_M19       [ACC]:   -0.472165      [MSE]:     15932.9
+[FOLD]:3
+>>> Train >>> RegressionModel_M19       [ACC]:   -0.702656      [MSE]:     433.342
+<<< Valid <<< RegressionModel_M19       [ACC]:   -0.285808      [MSE]:     396.902
+[FOLD]:4
+>>> Train >>> RegressionModel_M19       [ACC]:   -0.528082      [MSE]:     404.366
+<<< Valid <<< RegressionModel_M19       [ACC]:    -3.90084      [MSE]:     16459.1
+[FOLD]:5
+>>> Train >>> RegressionModel_M19       [ACC]:   -0.299631      [MSE]:     381.459
+<<< Valid <<< RegressionModel_M19       [ACC]:    -1.99838      [MSE]:     576.625
+ ============== M = 20 =============== 
+[FOLD]:1
+>>> Train >>> RegressionModel_M20       [ACC]:   -0.783153      [MSE]:      425.52
+<<< Valid <<< RegressionModel_M20       [ACC]:    0.322228      [MSE]:     409.834
+[FOLD]:2
+>>> Train >>> RegressionModel_M20       [ACC]:   -0.662022      [MSE]:      417.17
+<<< Valid <<< RegressionModel_M20       [ACC]:   -0.411901      [MSE]:     432.822
+[FOLD]:3
+>>> Train >>> RegressionModel_M20       [ACC]:   -0.698689      [MSE]:     432.436
+<<< Valid <<< RegressionModel_M20       [ACC]:   -0.277748      [MSE]:     394.001
+[FOLD]:4
+>>> Train >>> RegressionModel_M20       [ACC]:   -0.525764      [MSE]:     403.227
+<<< Valid <<< RegressionModel_M20       [ACC]:    -10.8713      [MSE]:      192132
+[FOLD]:5
+>>> Train >>> RegressionModel_M20       [ACC]:   -0.297766      [MSE]:     382.004
+<<< Valid <<< RegressionModel_M20       [ACC]:    -2.00614      [MSE]:     576.286
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ max [ACC]: -0.685351 at M = 3
+ min [MSE]: 456.53 at M = 5
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

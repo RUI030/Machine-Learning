@@ -1,18 +1,3 @@
-/*
-===========================================
-
-C:\Users\RUI\OneDrive - 國立陽明交通大學\文件\RUI\School\NCTUECE\2_Course Data\112_2\ML\Homework\1_LinearRegression
-
-Compile:
-g++ -std=c++11 -o main main.cpp regression.cpp dataset.cpp matrix.cpp -I C:/toolbox/eigen-3.4.0
-
-Execute (for different functions):
-./main
-./train
-./test
-===========================================
-*/
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -23,8 +8,10 @@ using namespace std;
 int main()
 {
     int k = 5;
-    dataset hw1, sub[5];
+    dataset hw1, sub[5], test;
     LinearRegression model;
+    double _mse, _acc;
+    vector<double> mse, acc, M;
     hw1.read("HW1.csv"); // load data
     // split into K subset
     int cut[6];    // index to split the subset
@@ -36,23 +23,85 @@ int main()
         cut[c] = c * n / k;
         sub[c - 1].copy(hw1, cut[c - 1], cut[c]);
     }
-    // K fold
-    for (int c = 0; c < k; c++)
+    test.copy(hw1, n, hw1.n);
+    hw1.clear();
+
+    // Note: it's time consuming to load and preprocess the data alot of time
+    // So maybe fix data and let m change is better and faster
+
+    // M = [5, 10, ..., 30]
+    for (int m = 3; m <= 20; m += 1)
     {
-        // clear
-        // put the data in
-        // preprocessing
-        // train
-        for (int m = 5; m <= 30; m += 5)
+        M.push_back((double)m);
+        cout << "\033[1;36m============== M = " << m << " =============== \033[0m" << endl;
+        model.setting(m);
+        // K fold
+        _mse = 0.0;
+        _acc = 0.0;
+        for (int c = 0; c < k; c++)
         {
-            model.setting(m);
+            cout << "\033[1;34m[FOLD]:" << c + 1 << "\033[0m" << endl;
+            // clear
+            model.train.x.clear();
+            model.train.y.clear();
+            model.valid.x.clear();
+            model.valid.y.clear();
+            // put the data in
+            for (int d = 0; d < k; d++)
+            {
+                if (d == c)
+                {
+                    model.valid.x.append(sub[d].x);
+                    model.valid.y.append(sub[d].y);
+                }
+                else
+                {
+                    model.train.x.append(sub[d].x);
+                    model.train.y.append(sub[d].y);
+                }
+            }
+            // preprocessing
+            model.prep();
+            // train
             model.update();
+            // evaluate
+            model.eval();
+            // record Loss Function, which could calculate from MSE since the given error function = 1/2 SUM((y-t)^2) = Nd/2 * MSE
+            _mse += model.valid.MSE[0];
+            _acc += model.valid.accuracy[0];
         }
-        // record Loss Function, which could calculate from MSE since the given error function = 1/2 SUM((y-t)^2) = Nd/2 * MSE
+        // average mse, accuracy
+        _mse /= (double)k;
+        _acc /= (double)k;
+        mse.push_back(_mse);
+        acc.push_back(_acc);
     }
-    // save every Loss 
+    // save result
+    matrix res;
+    res.append(M);
+    res.append(mse);
+    res.append(acc);
+    res.save("homework/Q3/res.csv");
     // Choose best Model
+    double minMSE = 10000, maxACC = -100000, mMSE, mACC;
+    for (int i = 0; i < M.size(); i++)
+    {
+        if (mse[i] < minMSE)
+        {
+            minMSE = mse[i];
+            mMSE = M[i];
+        }
+        if (acc[i] > maxACC)
+        {
+            maxACC = acc[i];
+            mACC = M[i];
+        }
+    }
+    // print result
+    cout << "\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+    cout << " max [ACC]: " << maxACC << " at M = " << mACC << endl;
+    cout << " min [MSE]: " << minMSE << " at M = " << mMSE << endl;
+    cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
     // Train & save model
-    
     return 0;
 }
