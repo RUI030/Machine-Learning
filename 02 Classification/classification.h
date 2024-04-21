@@ -33,13 +33,13 @@ public:
     // Data
     dataset train, valid;
     // statics
-    int k; // number of class (assumed data are labeled with int properly
-    int N, nf; // number of data, number of features
-    vector<int> Nk; // number of data for each class
-    vector<double> pi;
-    matrix mu, SIGMA, LAMBDA; // mu[feat][class]
+    int N; // #data
+    vector<int> Nk; // #data for each class
     // model
-    matrix w, w0; // [wk ... w1] => a_k(x) = x dot w + w0
+    int k, nf; // #class, #features
+    vector<double> pi;
+    matrix w, w0; // [w1 ... wk] => a_k(x) = x dot w + w0
+    matrix mu, LAMBDA; // mu[feat][class]
     std::string name;
 };
 

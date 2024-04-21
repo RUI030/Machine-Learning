@@ -184,7 +184,7 @@ void dataset::ConfusionMatrix()
     // Calculate the confusion matrix
     int y_true;
     int y_pred;
-    confusion_matrix.resize(4, 4, 0);
+    confusion_matrix.resize(k, k, 0);
     for (int i = 0; i < n; i++)
     {
         y_true = (int)y[i][0];

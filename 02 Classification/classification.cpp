@@ -47,33 +47,25 @@ void GenerativeModel::update(matrix &X, matrix &_t)
         t.push_back((int)_t[i][0]);
     }
     // Calculate the number of classes
-    // k = 0;
-    // for (int i = 0; i < t.size(); i++)
-    // {
-    //     if (t[i] > k)
-    //         k = t[i];
-    // }
-    // k++;
-    k = 4;
-    N = X.row(); // Number of rows of data
-    nf = X.col(); // Number of features
-    cout << "Number of data: " << N << endl;
-    cout << "Number of features: " << nf << endl;
-    // number of data for each class
+    k = 0;
+    for (int i = 0; i < t.size(); i++)
+    {
+        if (t[i] > k)
+            k = t[i];
+    }
+    k++;
+    N = X.row();
+    nf = X.col(); 
     Nk.clear();
-    Nk.resize(4, 0); // k = 4
+    Nk.resize(k, 0); // k = 4
     for (int i = 0; i < N; i++)
     {
         Nk[t[i]]++;
     }
-    cout << "Update Nk success"<<endl;
-    // pi (the prior probability of each class)
     for (int i = 0; i < k; i++)
     {
         pi.push_back((double)Nk[i] / (double)N);
     }
-    cout << "Update pi success"<<endl;
-    // mu (mean of each class of each feature)
     mu.resize(nf, k);
     for (int i = 0; i < N; i++)
     {
@@ -89,7 +81,6 @@ void GenerativeModel::update(matrix &X, matrix &_t)
             mu[j][i] /= Nk[i];
         }
     }
-    cout << "Update mu success"<<endl;
     // Calculate SIGMA
     MatrixXd sigma = MatrixXd::Zero(nf, nf); // Initialize sigma matrix in Eigen
     vector<MatrixXd> classSigma(k, MatrixXd::Zero(nf, nf)); // Per-class sigma matrices
@@ -112,14 +103,6 @@ void GenerativeModel::update(matrix &X, matrix &_t)
         }
         sigma += classSigma[i] * pi[i];
     }
-    cout << "Update EIGEN success"<<endl;
-    // Convert Eigen::MatrixXd back to custom matrix class
-    SIGMA.resize(nf, nf);
-    for (int i = 0; i < nf; ++i) {
-        for (int j = 0; j < nf; ++j) {
-            SIGMA[i][j] = sigma(i, j);
-        }
-    }
     // Calculate LAMBDA (inverse of SIGMA)
     MatrixXd lambda = sigma.inverse();
     // Convert Eigen::MatrixXd back to custom matrix class for LAMBDA
@@ -129,7 +112,6 @@ void GenerativeModel::update(matrix &X, matrix &_t)
             LAMBDA[i][j] = lambda(i, j);
         }
     }
-    cout << "Update LAMBDA success"<<endl;
     // weight = LAMBDA * mu
     w = LAMBDA * mu;
     // bias = [w_{k0}] = -0.5 * mu_k^T * SIGMA * mu_k + log(pi_k)
@@ -143,7 +125,6 @@ void GenerativeModel::update(matrix &X, matrix &_t)
         mu_k_T.dot(mu_k);
         w0[0][i] = -0.5 * mu_k_T[0][0] + log(pi[i]);
     }
-    cout << "Update WEIGHTS success"<<endl;
 }
 void GenerativeModel::update(dataset &ds)
 {
@@ -155,29 +136,50 @@ void GenerativeModel::update()
 }
 void GenerativeModel::predict(dataset &ds)
 {
-    matrix a, posterior(ds.n, k);
-    a = ds.x * w;
-    for (int i = 0; i < ds.n; i++)
-    {
-        for (int j = 0; j < k; j++)
-        {
-            posterior[i][j] = sigmoid(a[i][j]+w0[0][j]);
-        }
-    }
+    matrix scores(ds.n, k);
     ds.y_predict.resize(ds.n, 1);
     for (int i = 0; i < ds.n; i++)
     {
-        int maxpos = 0;
         for (int j = 0; j < k; j++)
         {
-            if (posterior[i][j] > posterior[i][maxpos])
-                ds.y_predict[i][0] = (double)j;
+            matrix x_minus_mu_j(nf, 1);
+            for (int m = 0; m < nf; m++)
+            {
+                // Subtract the class mean from each feature of the data point
+                x_minus_mu_j[m][0] = ds.x[i][m] - mu[m][j];
+            }
+
+            // Transpose the x_minus_mu_j to multiply with LAMBDA
+            matrix x_minus_mu_j_T = x_minus_mu_j; 
+            x_minus_mu_j_T.T();
+
+            // Calculate the score for class j
+            matrix score_j = x_minus_mu_j_T * LAMBDA * x_minus_mu_j; 
+            score_j.scale(-0.5); // Scale the score by -0.5
+            scores[i][j] = score_j[0][0] + log(pi[j]); // Add the log prior probability
         }
     }
+
+    // Find the class with the highest score for each data point
+    for (int i = 0; i < ds.n; i++)
+    {
+        int maxpos = 0;
+        for (int j = 1; j < k; j++)
+        {
+            if (scores[i][j] > scores[i][maxpos])
+            {
+                maxpos = j;
+            }
+        }
+        ds.y_predict[i][0] = maxpos;
+    }
 }
+
+
 void GenerativeModel::eval(dataset &ds)
 {
     predict(ds);
+    ds.k = k;
     ds.ConfusionMatrix();
     int correct = 0;
     double acc;
