@@ -2,6 +2,7 @@
 #include "matrix.h"
 #include "dataset.h"
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
 #include <cmath>
@@ -200,10 +201,23 @@ void GenerativeModel::rename(const std::string &modelName)
 void GenerativeModel::load(const std::string &modelName, const std::string &pre)
 {
     std::string _w = pre + modelName + ".csv";
+    std::string _set = pre + modelName + "_setting.csv";
+    std::string _pi = pre + modelName + "_pi.csv";
+    std::string _mu = pre + modelName + "_mu.csv";
+    std::string _L = pre + modelName + "_LAMBDA.csv";
     matrix w_all;
     w_all.read(_w);
     w0.slice(w_all, 0, 1, 0, k);
     w.slice(w_all, 1, nf+1, 0, k);
+    matrix tmp;
+    tmp.read(_set);
+    k = (int)tmp[0][0];
+    nf = (int)tmp[0][1];
+    matrix PI;
+    PI.read(_pi);
+    pi = PI[0];
+    mu.read(_mu);
+    LAMBDA.read(_L);    
 }
 void GenerativeModel::load(const std::string &modelName)
 {
@@ -212,10 +226,28 @@ void GenerativeModel::load(const std::string &modelName)
 void GenerativeModel::save(const std::string &modelName, const std::string &pre)
 {
     std::string _w = pre + modelName + ".csv";
+    std::string _set = pre + modelName + "_setting.csv";
+    std::string _pi = pre + modelName + "_pi.csv";
+    std::string _mu = pre + modelName + "_mu.csv";
+    std::string _L = pre + modelName + "_LAMBDA.csv";
+    // weights
     matrix w_all(nf+1, k);
     w_all.append(w0);
     w_all.append(w);
     w_all.save(_w);
+    // k, nf
+    matrix tmp(1, 2);
+    tmp[0][0] = k;
+    tmp[0][1] = nf;
+    tmp.save(_set);
+    // pi: prior probability
+    matrix PI;
+    PI.append(pi);
+    PI.save(_pi);
+    // mu
+    mu.save(_mu);
+    // LAMBDA
+    LAMBDA.save(_L);
 }
 void GenerativeModel::save(const std::string &modelName)
 {
@@ -248,6 +280,8 @@ void DiscriminativeModel::setting(double _lr, int _batch_size, int _epoch)
     lr = _lr;
     batch_size = _batch_size;
     epoch = _epoch;
+    string _name = name + "_lr" + to_string(lr) + "_bs" + to_string(batch_size);
+    rename(_name);
 }
 void DiscriminativeModel::batchPredict(dataset &ds, int start, int end)
 {
@@ -316,20 +350,28 @@ void DiscriminativeModel::batchUpdate(dataset &ds, int start, int end)
 }
 void DiscriminativeModel::update()
 {
+    update_log.clear();
     int iter = 0, batch_num;
-    double best_acc = 0;
+    double best_acc = 0.5;
     batch_num = train.n / batch_size;
     while (iter < epoch)
     {
+        vector<double> _log;_log.clear();
         for (int i = 0; i < batch_num; i++)
         {
             batchUpdate(train, i * batch_size, (i + 1) * batch_size);
-            // if (acc>0.9) {save;break;}
-            // if (acc>best_acc) save(_name);
         }
         batchUpdate(train, batch_num * batch_size, train.n);
         cout << "Epoch " << iter << ":";
         eval();
+        _log.push_back(train.accuracy[0]);
+        _log.push_back(valid.accuracy[0]);
+        update_log.append(_log);
+        if (train.accuracy[0] > best_acc)
+        {
+            best_acc = train.accuracy[0];
+            save(name + "_epoch" + to_string(iter));
+        }
         iter++;
     }
 }
@@ -374,9 +416,61 @@ void DiscriminativeModel::eval()
 {
     cout << " \033[36m>>> Train >>> \033[0m";
     eval(train);
-    cout << train.accuracy[0];
+    cout << setw(10) << train.accuracy[0];
     cout << " \033[35m<<< Valid <<< \033[0m";
     eval(valid);
-    cout << valid.accuracy[0];
+    cout << setw(10) << valid.accuracy[0];
     cout << endl;
+}
+void DiscriminativeModel::rename(const std::string &modelName)
+{
+    name = modelName;
+}
+void DiscriminativeModel::load(const std::string &modelName, const std::string &pre)
+{
+    std::string _w = pre + modelName + ".csv";
+    std::string _set = pre + modelName + "_param.csv";
+    w.read(_w);
+    matrix tmp;
+    tmp.read(_set);
+    K = (int)tmp[0][0];
+    M = (int)tmp[0][1];
+}
+void DiscriminativeModel::load(const std::string &modelName)
+{
+    load(modelName, "model/");
+}
+void DiscriminativeModel::save(const std::string &modelName, const std::string &pre)
+{
+    std::string _w = pre + modelName + ".csv";
+    std::string _p = pre + modelName + "_param.csv";
+    std::string _s = pre + modelName + "_setting.csv";
+    // weights
+    w.save(_w);
+    // K, M
+    matrix tmp(1, 2);
+    tmp[0][0] = K;
+    tmp[0][1] = M;
+    tmp.save(_p);
+    tmp.resize(1, 3);
+    tmp[0][0] = lr;
+    tmp[0][1] = batch_size;
+    tmp[0][2] = epoch;
+    tmp.save(_s);
+}
+void DiscriminativeModel::save(const std::string &modelName)
+{
+    save(modelName, "model/");
+}
+void DiscriminativeModel::save()
+{
+    save(name);
+}
+void DiscriminativeModel::saveLog(const std::string &filename)
+{
+    update_log.save("homework/"+filename+"_log.csv");
+}
+void DiscriminativeModel::saveLog()
+{
+    saveLog(name);
 }

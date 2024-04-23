@@ -64,8 +64,8 @@ public:
     void save(const std::string &modelName, const std::string &pre);
     void save(const std::string &modelName);
     void save();
-    void save_log(const std::string &filename);
-    void save_log();
+    void saveLog(const std::string &filename);
+    void saveLog();
     // Data
     dataset train, valid;
     // statics
@@ -75,7 +75,7 @@ public:
     matrix w; // w[M][K]
     std::string name;
     matrix update_log; // loss func, train acc, valid acc
-    // settings
+    // hyperparameters
     double lr;
     int batch_size, epoch;
 };
