@@ -34,7 +34,7 @@ public:
     // data
     matrix x,y,y_predict, y_k;
     // Variables
-    int k = 4 ,xdim,ydim; // #class = 4, #feature = 2, #label = 1
+    int k ,xdim,ydim; // #class = 4, #feature = 2, #label = 1
     int n;
     // Regression
     matrix PHI; // design matrix

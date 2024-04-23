@@ -231,7 +231,7 @@ void GenerativeModel::save(const std::string &modelName, const std::string &pre)
     std::string _mu = pre + modelName + "_mu.csv";
     std::string _L = pre + modelName + "_LAMBDA.csv";
     // weights
-    matrix w_all(nf+1, k);
+    matrix w_all;
     w_all.append(w0);
     w_all.append(w);
     w_all.save(_w);
@@ -280,8 +280,6 @@ void DiscriminativeModel::setting(double _lr, int _batch_size, int _epoch)
     lr = _lr;
     batch_size = _batch_size;
     epoch = _epoch;
-    string _name = name + "_lr" + to_string(lr) + "_bs" + to_string(batch_size);
-    rename(_name);
 }
 void DiscriminativeModel::batchPredict(dataset &ds, int start, int end)
 {
@@ -348,11 +346,11 @@ void DiscriminativeModel::batchUpdate(dataset &ds, int start, int end)
     // cout << "Weights Updated: " << endl;
     // w.print();
 }
-void DiscriminativeModel::update()
+void DiscriminativeModel::update(double decay, int step)
 {
     update_log.clear();
     int iter = 0, batch_num;
-    double best_acc = 0.5;
+    double best_acc = 0.4;
     batch_num = train.n / batch_size;
     while (iter < epoch)
     {
@@ -362,18 +360,28 @@ void DiscriminativeModel::update()
             batchUpdate(train, i * batch_size, (i + 1) * batch_size);
         }
         batchUpdate(train, batch_num * batch_size, train.n);
-        cout << "Epoch " << iter << ":";
+        cout << "Epoch " << setw(4) << iter << ":";
         eval();
         _log.push_back(train.accuracy[0]);
         _log.push_back(valid.accuracy[0]);
         update_log.append(_log);
-        if (train.accuracy[0] > best_acc)
+        if (valid.accuracy[0] > best_acc)
         {
-            best_acc = train.accuracy[0];
-            save(name + "_epoch" + to_string(iter));
+            best_acc = valid.accuracy[0];
+            save(iter);
+            best_ep = iter;
+        }
+        // schedular
+        if((iter % step) == 0)
+        {
+            lr *= decay;
         }
         iter++;
     }
+}
+void DiscriminativeModel::update()
+{
+    update(1, 100000000);
 }
 void DiscriminativeModel::predict(dataset &ds)
 {
@@ -393,13 +401,11 @@ void DiscriminativeModel::predict(dataset &ds)
         ds.y_predict[i][0] = maxpos;
     }
 }
-void DiscriminativeModel::eval(dataset &ds)
+void DiscriminativeModel::eval(dataset &ds, bool showCM)
 {
     predict(ds);
     ds.k = K;
     ds.ConfusionMatrix();
-    // cout << "\033[1;33mConfusion ";
-    // ds.confusion_matrix.print();
     int correct = 0;
     double acc;
     for (int i = 0; i < K; i++)
@@ -411,14 +417,24 @@ void DiscriminativeModel::eval(dataset &ds)
         ds.accuracy.push_back(acc);
     else
         ds.accuracy[0] = acc;
+    if (showCM)
+    {
+        cout << "\033[1;37mAccuracy:" << acc << "\033[0m" << endl;
+        cout << "\033[1;33mConfusion ";
+        ds.confusion_matrix.print();
+    }
+}
+void DiscriminativeModel::eval(dataset &ds)
+{
+    eval(ds, true);
 }
 void DiscriminativeModel::eval()
 {
     cout << " \033[36m>>> Train >>> \033[0m";
-    eval(train);
+    eval(train, false);
     cout << setw(10) << train.accuracy[0];
     cout << " \033[35m<<< Valid <<< \033[0m";
-    eval(valid);
+    eval(valid, false);
     cout << setw(10) << valid.accuracy[0];
     cout << endl;
 }
@@ -440,11 +456,13 @@ void DiscriminativeModel::load(const std::string &modelName)
 {
     load(modelName, "model/");
 }
-void DiscriminativeModel::save(const std::string &modelName, const std::string &pre)
+void DiscriminativeModel::save(const std::string &modelName, const std::string &pre, int ep)
 {
-    std::string _w = pre + modelName + ".csv";
-    std::string _p = pre + modelName + "_param.csv";
-    std::string _s = pre + modelName + "_setting.csv";
+    // string _name = modelName + "_lr" + to_string(lr) + "_bs" + to_string(batch_size) + "_ep" + to_string(epoch);
+    string _name = modelName + "_ep" + to_string(ep);
+    std::string _w = pre + _name + ".csv";
+    std::string _p = pre + _name + "_param.csv";
+    std::string _s = pre + _name + "_setting.csv";
     // weights
     w.save(_w);
     // K, M
@@ -458,13 +476,17 @@ void DiscriminativeModel::save(const std::string &modelName, const std::string &
     tmp[0][2] = epoch;
     tmp.save(_s);
 }
-void DiscriminativeModel::save(const std::string &modelName)
+void DiscriminativeModel::save(const std::string &modelName, int ep)
 {
-    save(modelName, "model/");
+    save(modelName, "model/", ep);
+}
+void DiscriminativeModel::save(int ep)
+{
+    save(name, "model/", ep);
 }
 void DiscriminativeModel::save()
 {
-    save(name);
+    save(name, "model/", epoch);
 }
 void DiscriminativeModel::saveLog(const std::string &filename)
 {
