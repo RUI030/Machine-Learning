@@ -232,8 +232,8 @@ DiscriminativeModel::DiscriminativeModel(/* args */)
     name = "DiscriminativeModel";
     K = 4;
     M = 3;
-    setting(0.01, 100, 20);
-    w.resize(M, K, 0.0);
+    setting(0.1, 100, 20);
+    w.resize(M, K, 0.5);
 }
 DiscriminativeModel::~DiscriminativeModel()
 {
@@ -255,24 +255,24 @@ void DiscriminativeModel::batchPredict(dataset &ds, int start, int end)
     {
         ds.y_k.resize(ds.n, K);
     }
-    double sum;
+    double sum, tmp;
     int n;
-    vector<double> a; a.resize(K, 0.0);
+    vector<double> a(K, 0.0); // Initialized directly
     for (int _n = start; _n < end; _n++)
     {
         n = _n % ds.n;
-        a.clear();
         sum = 0;
         for (int i = 0; i < K; i++)
         {
-            a[i] = w[0][i];
+            tmp = w[0][i];
             for (int j = 1; j < M; j++)
             {
-                a[i] += w[j][i] * ds.x[n][j];
+                tmp += w[j][i] * ds.x[n][j-1];
             }
-            a[i] = exp(a[i]);
+            a[i] = exp(tmp);
             sum += a[i];
         }
+        sum = sum == 0 ? 1e-10 : sum; // Avoid division by zero
         for (int i = 0; i < K; i++)
         {
             ds.y_k[n][i] = a[i] / sum;
@@ -311,6 +311,8 @@ void DiscriminativeModel::batchUpdate(dataset &ds, int start, int end)
             w[i][j] -= lr * grad[i][j] * scalar;
         }
     }
+    // cout << "Weights Updated: " << endl;
+    // w.print();
 }
 void DiscriminativeModel::update()
 {
@@ -335,7 +337,7 @@ void DiscriminativeModel::predict(dataset &ds)
 {
     batchPredict(ds, 0, ds.n);
     ds.y_predict.resize(ds.n, 1);
-    double maxpos; // This should be an integer, not a double.
+    int maxpos; // Correct type for indexing
     for (int i = 0; i < ds.n; i++)
     {
         maxpos = 0;
@@ -343,10 +345,10 @@ void DiscriminativeModel::predict(dataset &ds)
         {
             if (ds.y_k[i][j] > ds.y_k[i][maxpos])
             {
-                maxpos = j; // This should be inside the loop.
+                maxpos = j;
             }
         }
-        ds.y_predict[i][0] = maxpos; // This needs to be inside the loop, right after finding maxpos.
+        ds.y_predict[i][0] = maxpos;
     }
 }
 void DiscriminativeModel::eval(dataset &ds)
@@ -354,8 +356,8 @@ void DiscriminativeModel::eval(dataset &ds)
     predict(ds);
     ds.k = K;
     ds.ConfusionMatrix();
-    cout << "\033[1;33mConfusion ";
-    ds.confusion_matrix.print();
+    // cout << "\033[1;33mConfusion ";
+    // ds.confusion_matrix.print();
     int correct = 0;
     double acc;
     for (int i = 0; i < K; i++)
