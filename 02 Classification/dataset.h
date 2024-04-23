@@ -29,9 +29,10 @@ public:
     // Regression
     void designMatrix(const int M, const double s, const std::vector<double> &u);
     // Classification
+    void relabel(double source, double target);
     void ConfusionMatrix();
     // data
-    matrix x,y,y_predict;
+    matrix x,y,y_predict, y_k;
     // Variables
     int k = 4 ,xdim,ydim; // #class = 4, #feature = 2, #label = 1
     int n;

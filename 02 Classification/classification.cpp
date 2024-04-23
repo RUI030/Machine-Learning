@@ -7,7 +7,6 @@
 #include <cmath>
 #include <Eigen/Dense>
 
-
 using namespace std;
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -24,19 +23,10 @@ GenerativeModel::GenerativeModel(/* args */)
 GenerativeModel::~GenerativeModel()
 {
 }
-void GenerativeModel::relabel(dataset &ds, int source, int target)
+void GenerativeModel::relabel(double source, double target)
 {
-    for (int i = 0; i < ds.n; i++)
-    {
-        if (ds.y[i][0] == source)
-            ds.y[i][0] = target;
-    }
-    
-}
-void GenerativeModel::relabel(int source, int target)
-{
-    relabel(train, source, target);
-    relabel(valid, source, target);
+    train.relabel(source, target);
+    valid.relabel(source, target);
 }
 void GenerativeModel::update(matrix &X, matrix &_t)
 {
@@ -174,8 +164,6 @@ void GenerativeModel::predict(dataset &ds)
         ds.y_predict[i][0] = maxpos;
     }
 }
-
-
 void GenerativeModel::eval(dataset &ds)
 {
     predict(ds);
@@ -236,4 +224,157 @@ void GenerativeModel::save(const std::string &modelName)
 void GenerativeModel::save()
 {
     save(name);
+}
+
+// Discriminative Classification Model
+DiscriminativeModel::DiscriminativeModel(/* args */)
+{
+    name = "DiscriminativeModel";
+    K = 4;
+    M = 3;
+    setting(0.01, 100, 20);
+    w.resize(M, K, 0.0);
+}
+DiscriminativeModel::~DiscriminativeModel()
+{
+}
+void DiscriminativeModel::relabel(double source, double target)
+{
+    train.relabel(source, target);
+    valid.relabel(source, target);
+}
+void DiscriminativeModel::setting(double _lr, int _batch_size, int _epoch)
+{
+    lr = _lr;
+    batch_size = _batch_size;
+    epoch = _epoch;
+}
+void DiscriminativeModel::batchPredict(dataset &ds, int start, int end)
+{
+    if ((ds.y_k.col()!=K)||(ds.y_k.row()!=ds.n))
+    {
+        ds.y_k.resize(ds.n, K);
+    }
+    double sum;
+    int n;
+    vector<double> a; a.resize(K, 0.0);
+    for (int _n = start; _n < end; _n++)
+    {
+        n = _n % ds.n;
+        a.clear();
+        sum = 0;
+        for (int i = 0; i < K; i++)
+        {
+            a[i] = w[0][i];
+            for (int j = 1; j < M; j++)
+            {
+                a[i] += w[j][i] * ds.x[n][j];
+            }
+            a[i] = exp(a[i]);
+            sum += a[i];
+        }
+        for (int i = 0; i < K; i++)
+        {
+            ds.y_k[n][i] = a[i] / sum;
+        }
+    }
+}
+void DiscriminativeModel::batchUpdate(dataset &ds, int start, int end)
+{
+    batchPredict(ds, start, end);
+    matrix grad; grad.resize(M, K, 0.0); // [M][K]
+    vector<double> coef; coef.resize(K, 0.0); // [K]
+    int n;
+    for (int _n = start; _n < end; _n++)
+    {
+        n = _n % ds.n;
+        for (int i = 0; i < K; i++)
+        {
+            coef[i] = ds.y_k[n][i];
+        }
+        coef[(int)ds.y[n][0]] -= 1;
+        for (int i = 0; i < K; i++)
+        {
+            grad[0][i] += coef[i];
+            for (int j = 1; j < M; j++)
+            {
+                grad[j][i] += coef[i] * ds.x[n][j-1];
+            }
+        }
+    }
+    // update w
+    double scalar = 1.0 / (double)(end - start);
+    for (int i = 0; i < M; i++)
+    {
+        for (int j = 0; j < K; j++)
+        {
+            w[i][j] -= lr * grad[i][j] * scalar;
+        }
+    }
+}
+void DiscriminativeModel::update()
+{
+    int iter = 0, batch_num;
+    double best_acc = 0;
+    batch_num = train.n / batch_size;
+    while (iter < epoch)
+    {
+        for (int i = 0; i < batch_num; i++)
+        {
+            batchUpdate(train, i * batch_size, (i + 1) * batch_size);
+            // if (acc>0.9) {save;break;}
+            // if (acc>best_acc) save(_name);
+        }
+        batchUpdate(train, batch_num * batch_size, train.n);
+        cout << "Epoch " << iter << ":";
+        eval();
+        iter++;
+    }
+}
+void DiscriminativeModel::predict(dataset &ds)
+{
+    batchPredict(ds, 0, ds.n);
+    ds.y_predict.resize(ds.n, 1);
+    double maxpos; // This should be an integer, not a double.
+    for (int i = 0; i < ds.n; i++)
+    {
+        maxpos = 0;
+        for (int j = 1; j < K; j++)
+        {
+            if (ds.y_k[i][j] > ds.y_k[i][maxpos])
+            {
+                maxpos = j; // This should be inside the loop.
+            }
+        }
+        ds.y_predict[i][0] = maxpos; // This needs to be inside the loop, right after finding maxpos.
+    }
+}
+void DiscriminativeModel::eval(dataset &ds)
+{
+    predict(ds);
+    ds.k = K;
+    ds.ConfusionMatrix();
+    cout << "\033[1;33mConfusion ";
+    ds.confusion_matrix.print();
+    int correct = 0;
+    double acc;
+    for (int i = 0; i < K; i++)
+    {
+        correct += ds.confusion_matrix[i][i];
+    }
+    acc = (double)correct / (double)ds.n;
+    if (ds.accuracy.empty())
+        ds.accuracy.push_back(acc);
+    else
+        ds.accuracy[0] = acc;
+}
+void DiscriminativeModel::eval()
+{
+    cout << " \033[36m>>> Train >>> \033[0m";
+    eval(train);
+    cout << train.accuracy[0];
+    cout << " \033[35m<<< Valid <<< \033[0m";
+    eval(valid);
+    cout << valid.accuracy[0];
+    cout << endl;
 }

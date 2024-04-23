@@ -179,6 +179,14 @@ void dataset::designMatrix(const int M, const double s, const std::vector<double
         }
     }
 }
+void dataset::relabel(double source, double target)
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (y[i][0] == source)
+            y[i][0] = target;
+    }
+}
 void dataset::ConfusionMatrix()
 {
     // Calculate the confusion matrix

@@ -14,8 +14,7 @@ private:
 public:
     GenerativeModel(/* args */);
     ~GenerativeModel();
-    void relabel(dataset &ds, int source, int target);
-    void relabel(int source, int target);
+    void relabel(double source, double target);
     void update(matrix &X, matrix &t);
     void update(dataset &ds);
     void update();
@@ -41,6 +40,42 @@ public:
     matrix w, w0; // [w1 ... wk] => a_k(x) = x dot w + w0
     matrix mu, LAMBDA; // mu[feat][class]
     std::string name;
+};
+
+class DiscriminativeModel
+{   
+private:
+    /* data */  
+public:
+    DiscriminativeModel(/* args */);
+    ~DiscriminativeModel();
+    void relabel(double source, double target);
+    void setting(double _lr, int _batch_size, int _epoch);
+    void batchPredict(dataset &ds, int start, int end);
+    void batchUpdate(dataset &ds, int start, int end);
+    void update();
+    void predict(dataset &ds);
+    void eval(dataset &ds);              // if valid.y_predict is empty, predict first
+    void eval();      
+    // load model & save model
+    void rename(const std::string &modelName);
+    void load(const std::string &modelName, const std::string &pre);
+    void load(const std::string &modelName);
+    void save(const std::string &modelName, const std::string &pre);
+    void save(const std::string &modelName);
+    void save();
+
+    // Data
+    dataset train, valid;
+    // statics
+    int N; // #data
+    // model
+    int K, M; // #class, #phi
+    matrix w; // w[M][K]
+    std::string name;
+    // settings
+    double lr;
+    int batch_size, epoch;
 };
 
 #endif // CLASSIFICATION_H
