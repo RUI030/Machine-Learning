@@ -7,6 +7,7 @@
 #include <vector>
 #include <cmath>
 #include <Eigen/Dense>
+#include <cstdlib>
 
 using namespace std;
 using Eigen::MatrixXd;
@@ -281,6 +282,19 @@ void DiscriminativeModel::setting(double _lr, int _batch_size, int _epoch)
     batch_size = _batch_size;
     epoch = _epoch;
 }
+void DiscriminativeModel::randWeight()
+{
+    int dist = 100;
+    double tmp, distd = (double)dist;
+    for (int i = 0; i < M; i++)
+    {
+        for (int j = 0; j < K; j++)
+        {
+            tmp = double(rand() % dist);
+            w[i][j] = (tmp*2.0 / distd)-1.0;
+        }
+    }
+}
 void DiscriminativeModel::batchPredict(dataset &ds, int start, int end)
 {
     if ((ds.y_k.col()!=K)||(ds.y_k.row()!=ds.n))
@@ -368,7 +382,8 @@ void DiscriminativeModel::update(double decay, int step)
         if (valid.accuracy[0] > best_acc)
         {
             best_acc = valid.accuracy[0];
-            save(iter);
+            // save(iter);
+            save(epoch);
             best_ep = iter;
         }
         // schedular
@@ -459,7 +474,11 @@ void DiscriminativeModel::load(const std::string &modelName)
 void DiscriminativeModel::save(const std::string &modelName, const std::string &pre, int ep)
 {
     // string _name = modelName + "_lr" + to_string(lr) + "_bs" + to_string(batch_size) + "_ep" + to_string(epoch);
-    string _name = modelName + "_ep" + to_string(ep);
+    string _name;
+    if (ep < 0 || ep >= epoch)
+        _name = modelName;
+    else
+        _name = modelName + "_ep" + to_string(ep);
     std::string _w = pre + _name + ".csv";
     std::string _p = pre + _name + "_param.csv";
     std::string _s = pre + _name + "_setting.csv";

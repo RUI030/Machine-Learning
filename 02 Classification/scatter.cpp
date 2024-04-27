@@ -4,13 +4,14 @@
 int main()
 {
     dataset scatter; matrix X;
-    int count = 100;
+    int count = 1000;
+    double div = 10;
     for (int i = 0; i < count; i++)
     {
         for (int j = 0; j < count; j++)
         {
             vector<double> x(2);
-            x[0] = i; x[1] = j;
+            x[0] = (double)i/div; x[1] = (double)j/div;
             X.append(x);
         }
     }

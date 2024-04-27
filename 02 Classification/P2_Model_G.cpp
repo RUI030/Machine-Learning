@@ -12,6 +12,10 @@ int main()
     model_G.valid.read("HW2_testing.csv");
     model_G.train.relabel(3, 0);
     model_G.valid.relabel(3, 0);
+    // normalize x
+    // model_G.train.x.normalize();
+    // model_G.valid.x.normalize();
+    // scatter.x.normalize();
     // Part 2.
     model_G.rename("GenerativeModel2");
     model_G.k = 3;

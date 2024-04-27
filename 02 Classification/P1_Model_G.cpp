@@ -10,6 +10,10 @@ int main()
     // Read data
     model_G.train.read("HW2_training.csv");
     model_G.valid.read("HW2_testing.csv");
+    // normalize x
+    // model_G.train.x.normalize();
+    // model_G.valid.x.normalize();
+    // scatter.x.normalize();
     // Part 1.
     model_G.update();
     model_G.eval();

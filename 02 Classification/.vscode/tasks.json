@@ -10,7 +10,7 @@
                 "/nologo",
                 "/source-charset:utf-8",
                 "/Fe${fileDirname}\\${fileBasenameNoExtension}.exe",
-                "P1_Model_D.cpp",
+                "P2_Model_D.cpp",
                 "matrix.cpp",
                 "dataset.cpp",
                 "classification.cpp",

@@ -10,9 +10,14 @@ int main()
     // Read data
     model_D.train.read("HW2_training.csv");
     model_D.valid.read("HW2_testing.csv");
+    // normalize x
+    model_D.train.x.normalize();
+    model_D.valid.x.normalize();
+    scatter.x.normalize();
     // Part 1.
-    model_D.setting(0.001, 500, 3000);
-    model_D.update(0.85, 100);
+    model_D.setting(0.01, 200, 200);
+    model_D.randWeight();
+    model_D.update(0.8, 20);
     model_D.eval();
     model_D.predict(scatter);
     scatter.y_predict.save("homework/p1_d_scatter_y.csv");

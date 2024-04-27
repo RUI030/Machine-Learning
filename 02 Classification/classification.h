@@ -51,6 +51,7 @@ public:
     ~DiscriminativeModel();
     void relabel(double source, double target);
     void setting(double _lr, int _batch_size, int _epoch);
+    void randWeight();
     void batchPredict(dataset &ds, int start, int end);
     void batchUpdate(dataset &ds, int start, int end);
     void update(double decay, int step);
