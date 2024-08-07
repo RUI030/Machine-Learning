@@ -58,7 +58,7 @@ C:\toolbox
 ## using `cl` to compile the project
 > [!IMPORTANT]
 > **YOU NEED TO** [**OPEN VSCODE USING Developer Command Prompt for VS 2022 WITH THE COMMAND CODE**](#open-vscode-with-command-code)
-> **Reference**: [compile the code in vscode](https://code.visualstudio.com/docs/languages/cpp)
+> <br/>**Reference**: [compile the code in vscode](https://code.visualstudio.com/docs/languages/cpp)
 
 1. Install the C/C++ plug-in in VSCode
 2. Install [**MinGW**](https://www.mingw-w64.org/downloads/) with the [instructions](https://code.visualstudio.com/docs/cpp/config-mingw#_create-a-hello-world-app). Please make sure the host correspond to your OS, for example I use Windows 11, and I installed [MSYS2](https://www.msys2.org/)
